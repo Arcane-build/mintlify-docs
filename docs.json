@@ -93,6 +93,44 @@
             ]
           }
         ]
+      },
+      {
+        "tab": "Trust & Security",
+        "groups": [
+          {
+            "group": "Overview",
+            "icon": "shield-check",
+            "pages": [
+              "security/introduction",
+              "security/review-summary"
+            ]
+          },
+          {
+            "group": "Using Microset",
+            "icon": "wallet",
+            "pages": [
+              "security/user-flow",
+              "security/wallet-interactions"
+            ]
+          },
+          {
+            "group": "Contract & Security",
+            "icon": "file-code",
+            "pages": [
+              "security/contracts",
+              "security/security-assessment",
+              "security/transaction-safety"
+            ]
+          },
+          {
+            "group": "Data & Compliance",
+            "icon": "scale",
+            "pages": [
+              "security/data-privacy",
+              "security/compliance-and-risk-disclosure"
+            ]
+          }
+        ]
       }
     ]
   },
