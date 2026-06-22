@@ -1,0 +1,77 @@
+---
+title: "Transaction Safety"
+description: "Example transactions, expected effects, and simulation evidence."
+---
+
+<Info>
+  This page gives reviewers concrete, reproducible evidence. Fill in real
+  transaction signatures and explorer links so each example can be independently
+  verified on Solana.
+</Info>
+
+## Example transactions
+
+<Tabs>
+  <Tab title="Trade (swap)">
+    | Field | Value |
+    | --- | --- |
+    | Instruction | `swap` |
+    | Transaction signature | [TODO: Add Solana transaction signature] |
+    | Signer (user) | [TODO] |
+    | Program | [TODO: production program ID] |
+    | Direction / side | Buy/Sell · YES/NO [TODO] |
+    | Slippage bound | `minimum_receive_amount` = [TODO] |
+    | Expected balance change | Quote out/in + outcome tokens in/out; fee to `team_wallet` |
+    | Events | `TradeEvent` |
+  </Tab>
+  <Tab title="Claim winnings">
+    | Field | Value |
+    | --- | --- |
+    | Instruction | `claim_winnings` |
+    | Transaction signature | [TODO: Add Solana transaction signature] |
+    | Precondition | Market resolved / completed |
+    | Expected balance change | Winning tokens burned; proportional quote paid from vault |
+    | Events | `ClaimWinningsEvent` |
+  </Tab>
+  <Tab title="Add liquidity">
+    | Field | Value |
+    | --- | --- |
+    | Instruction | `add_liquidity` |
+    | Transaction signature | [TODO: Add Solana transaction signature] |
+    | Expected balance change | Quote user → vault; LP position recorded |
+    | Events | (none emitted) |
+  </Tab>
+</Tabs>
+
+## Expected balance changes
+
+[TODO: For each example, describe exactly which balances change and by how much,
+so a reviewer can confirm there are no unexpected outbound transfers.]
+
+## Simulation results
+
+<Note>
+  Solana wallets and risk engines simulate transactions before signing. Providing
+  your own simulation output strengthens the review.
+</Note>
+
+<CardGroup cols={3}>
+  <Card title="Explorer (program)" icon="magnifying-glass">
+    [TODO: Solana Explorer / Solscan link for the program]
+  </Card>
+  <Card title="Example tx trace" icon="receipt">
+    [TODO: Explorer link for an example transaction]
+  </Card>
+  <Card title="Wallet simulation" icon="wallet">
+    [TODO: Phantom/Blockaid simulation screenshot]
+  </Card>
+</CardGroup>
+
+## Why these transactions are expected and benign
+
+Each example maps one-to-one to an action the user explicitly initiated. Trades
+price against a transparent on-chain AMM with a user-set slippage bound; claims
+pay out by a fixed proportional formula from a program-owned vault. There are no
+hidden transfers and no broad token-delegate authorizations beyond those
+documented in [Wallet Interactions](/security/wallet-interactions). [TODO: tailor
+this to the confirmed production behavior.]

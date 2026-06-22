@@ -1,0 +1,72 @@
+---
+title: "Wallet Interactions"
+description: "Every signature and authorization Microset requests from a connected Solana wallet."
+---
+
+<Info>
+  This page enumerates all wallet interactions. Microset is Solana-only, so the
+  relevant concepts are message signing, transaction signing, and SPL token
+  movement — not EVM approvals. Rows marked `[TODO]` should be confirmed against
+  the production frontend before submission.
+</Info>
+
+## Permissions requested
+
+| Interaction | Requested? | Notes |
+| --- | --- | --- |
+| Connect wallet (read public key) | ✅ Yes | Via Privy, Solana-only; external wallets |
+| Sign-in message (`signMessage`) | ✅ Yes | Human-readable, prefixed `Microsets:wallet-auth:`; off-chain; authorizes a backend JWT only |
+| Sign transaction (`signTransaction` / `sendTransaction`) | ✅ Yes | Only on explicit user action (trade, add/withdraw liquidity, claim) |
+| Embedded wallet creation | ❌ No | Disabled (`createOnLogin: 'off'`) |
+| Auto-approve / blind signing | ❌ No | [TODO: confirm no auto-approve is enabled in production] |
+
+## Signature types
+
+<AccordionGroup>
+  <Accordion title="Message signing (off-chain)">
+    Used once per connected wallet for authentication. The signed payload begins
+    with `Microsets:wallet-auth:` and is verified server-side to issue a JWT. It
+    grants no on-chain authority and moves no funds.
+  </Accordion>
+  <Accordion title="Transaction signing (on-chain)">
+    Used for `swap`, `add_liquidity`, `withdraw_liquidity`, and `claim_winnings`.
+    Each is a standard Solana transaction the user reviews in their wallet.
+  </Accordion>
+  <Accordion title="Session wallet delegate">
+    Optionally, a short-lived session keypair is derived from a user-signed
+    message so repeated bets don't re-prompt. [TODO: document the session key's
+    scope, lifetime, and revocation, and confirm the consent shown to users.]
+  </Accordion>
+</AccordionGroup>
+
+## Token authorization behavior
+
+<Warning>
+  Solana does not use ERC20 `approve` / `setApprovalForAll` / Permit2. Outcome
+  tokens and the quote asset are moved by the program's instructions when the user
+  signs the corresponding transaction. Complete the rows below from the production
+  frontend so reviewers can confirm no broad token-delegate authority is granted.
+</Warning>
+
+| Mechanism | Used? | Notes |
+| --- | --- | --- |
+| SPL `Approve` (token delegate) | [TODO: Confirm] | If the session wallet uses an SPL delegate, document its scope and amount |
+| Direct transfer via signed instruction | ✅ Yes | Quote/outcome tokens move within `swap`, liquidity, and claim instructions |
+| Outcome-token mint authority | ❌ Revoked | Yes/No mints have mint authority set to `None` after initial supply (fixed supply) |
+
+## Program mechanics (Solana equivalents)
+
+| Mechanic | Status | Notes |
+| --- | --- | --- |
+| Proxy / `delegatecall` | ❌ N/A | Not a Solana concept |
+| Program upgradeability | [TODO: Confirm] | Solana programs are upgradeable by default via the BPF Upgradeable Loader unless the upgrade authority is removed. Confirm the deployed program's upgrade authority (and whether it is a multisig or has been made immutable). See [Contracts](/security/contracts). |
+| Cross-program invocations (CPIs) | ✅ Yes | Calls to the SPL Token Program, Associated Token Program, and (for NO-token metadata) Metaplex |
+| PDAs holding funds | ✅ Yes | A program-owned global vault PDA holds reserves; payouts are signed by the program per on-chain rules |
+
+## Summary
+
+Microset requests a wallet connection, one human-readable sign-in message, and
+explicit transaction signatures for each trade or claim. Outcome-token supply is
+fixed (mint authority revoked), and funds move only through documented
+instructions. Complete the `[TODO]` rows — especially the session-wallet scope and
+the program's upgrade authority — so a reviewer can verify this end to end.

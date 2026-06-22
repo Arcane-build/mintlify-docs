@@ -1,0 +1,85 @@
+---
+title: "Security Assessment"
+description: "Microset's security posture, threat model, and reviewed risk areas."
+---
+
+<Info>
+  This is a self-assessment unless an independent audit is linked below. Claims
+  here are verifiable against the source code and on-chain behavior. Where a
+  control has not been independently verified, it is marked accordingly.
+</Info>
+
+## Security posture
+
+Microset is a non-custodial Solana prediction market. The security goals are:
+(1) users sign every on-chain action; (2) market reserves move only by fixed
+on-chain rules from program-owned vault PDAs; (3) outcome-token supply is fixed
+(mint authority revoked); and (4) administrative powers are limited, two-step, and
+disclosed.
+
+## Threat model
+
+| Threat | Mitigation | Status |
+| --- | --- | --- |
+| Operator drains user funds | Funds in program PDAs; payouts by on-chain formula only | [TODO: confirm upgrade authority cannot be abused] |
+| Malicious program upgrade | Upgrade authority held by multisig or removed | [TODO: confirm] |
+| Unfair resolution | Authority or M-of-N council; ending-slot gate | [TODO: confirm production council/threshold] |
+| Blind-signature phishing | Human-readable sign-in message; explicit transactions | Confirmed by design |
+| Inflated token supply | Mint authority revoked after initial supply | Confirmed in source |
+| Slippage / sandwich on trades | `minimum_receive_amount` slippage bound on `swap` | Confirmed in source |
+| Frontend compromise | [TODO: hosting + build integrity controls] | [TODO: confirm] |
+
+## Smart contract risks reviewed
+
+<AccordionGroup>
+  <Accordion title="Access control">
+    Single global `Config` authority with two-step transfer. Whitelist and
+    resolution paths are authority/council gated. [TODO: confirm the authority key
+    is a multisig.]
+  </Accordion>
+  <Accordion title="Fund custody & payouts">
+    Reserves are held in a program-owned vault PDA and paid out by the AMM and
+    `claim_winnings` formulas; native-SOL payouts preserve rent-exemption. No path
+    lets an operator transfer arbitrary user funds.
+  </Accordion>
+  <Accordion title="Token safety">
+    YES/NO mints have their mint authority revoked to `None` after the initial
+    supply, fixing supply. Quote assets are restricted to a whitelisted set.
+  </Accordion>
+  <Accordion title="Arithmetic / AMM">
+    Per-side constant-product pricing with slippage protection. [TODO: confirm
+    checked arithmetic / overflow handling in `amm.rs`.]
+  </Accordion>
+</AccordionGroup>
+
+## Application security reviewed
+
+| Area | Notes |
+| --- | --- |
+| Wallet / auth | Privy, Solana-only, external wallets; sign-in message → backend JWT |
+| Session wallet | Delegated session key derived from a signed message | [TODO: document scope, lifetime, revocation] |
+| Transaction construction | Built client-side from the program IDL; user signs in-wallet |
+| Backend | Node/Express + MongoDB; JWT auth | [TODO: confirm hosting, secrets, rate limiting] |
+| Dependency integrity | [TODO: lockfiles, build provenance] |
+
+## Testing summary
+
+- Smart-contract tests: **None present in the contracts repository.** [TODO: add Anchor integration tests covering trade, liquidity, resolution, and claim paths.]
+- Backend tests: two unit tests (`jwt-roundtrip`, `password-md5`). [TODO: expand coverage.]
+- Static analysis: [TODO: run and link results, e.g. an Anchor/Solana auditing tool.]
+
+## Audit
+
+<Warning>
+  Audit status: **Not yet audited** (no audit artifact found in the repositories).
+  State this honestly — do not imply an audit exists. An independent audit is the
+  single strongest signal you can add to this review.
+</Warning>
+
+## Known limitations
+
+- Program ID differs between the contracts repo and the frontend — must be reconciled.
+- Repo configuration targets **devnet**; confirm the production mainnet deployment.
+- No smart-contract test suite and no third-party audit yet.
+- Upgrade authority of the deployed program is unconfirmed.
+- [TODO: add any other honest limitations and planned remediations with dates.]

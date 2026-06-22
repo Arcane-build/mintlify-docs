@@ -1,0 +1,95 @@
+---
+title: "User Flow"
+description: "Step-by-step wallet connection and transaction flows, as the user experiences them."
+---
+
+<Info>
+  This page documents exactly what a user sees and signs. Reviewers can use it to
+  reproduce the flow and confirm there are no hidden steps.
+</Info>
+
+## Wallet connection & sign-in flow
+
+Microset uses [Privy](https://www.privy.io/) configured **Solana-only**
+(`walletChainType: 'solana-only'`) with external wallets (Phantom, Solflare,
+Backpack, and other Wallet-Standard wallets). Embedded-wallet creation is disabled.
+
+<Steps>
+  <Step title="User opens the app">
+    The user opens the Microset app. [TODO: confirm production app URL].
+  </Step>
+  <Step title="User connects a Solana wallet">
+    Privy prompts the user to connect an existing Solana wallet. No funds move at
+    this step. [TODO: Add screenshot of the connect prompt].
+  </Step>
+  <Step title="User signs a sign-in message">
+    To authenticate with the backend, the wallet is asked to sign a human-readable
+    message prefixed `Microsets:wallet-auth:`. This is an off-chain
+    `signMessage` request — it authorizes nothing on-chain and moves no funds. The
+    backend verifies the signature and issues a session JWT.
+  </Step>
+  <Step title="(Optional) Session wallet">
+    To avoid re-prompting on every bet, the app can derive a short-lived session
+    key from a signed message. This is a UX convenience; the user authorizes it
+    explicitly. [TODO: confirm the exact consent copy shown to users].
+  </Step>
+</Steps>
+
+## Trade / claim transaction flow
+
+<Steps>
+  <Step title="User selects a market and side">
+    The user chooses a market and a Yes or No position in the UI.
+  </Step>
+  <Step title="App builds a Solana transaction">
+    The app constructs the corresponding program instruction (for example,
+    `swap`) using the program IDL. Parameters match the displayed action,
+    including a `minimum_receive_amount` for slippage protection.
+  </Step>
+  <Step title="Wallet shows the transaction">
+    The Solana wallet displays the instruction and accounts for review. [TODO: Add
+    screenshot of the wallet transaction prompt].
+  </Step>
+  <Step title="User signs and the app submits">
+    After the user signs, the app broadcasts the transaction to the configured RPC.
+    Nothing executes without the signature.
+  </Step>
+  <Step title="Settlement">
+    The expected state change occurs on-chain and is visible on a Solana explorer.
+    See [Transaction Safety](/security/transaction-safety).
+  </Step>
+</Steps>
+
+## What the user sees and signs
+
+| Stage | What the user sees | What the user signs |
+| --- | --- | --- |
+| Connect | Privy wallet-connect prompt | Nothing |
+| Sign-in | `Microsets:wallet-auth:` message | One off-chain message (no fund movement) |
+| Trade | Market + position details | One on-chain transaction (`swap`) |
+| Claim | Resolved market + payout | One on-chain transaction (`claim_winnings`) |
+
+## Expected result after signing
+
+After a trade, the user receives or sells Yes/No outcome tokens at the AMM price,
+with a platform fee applied. After `claim_winnings` on a resolved market, the
+user's winning tokens are burned and the proportional quote payout is transferred
+from the vault to the user. No additional or background transactions are
+triggered.
+
+## Evidence placeholders
+
+<CardGroup cols={2}>
+  <Card title="Connect prompt" icon="image">
+    [TODO: Attach screenshot of the Privy Solana connect prompt]
+  </Card>
+  <Card title="Sign-in message" icon="image">
+    [TODO: Attach screenshot of the `Microsets:wallet-auth:` message prompt]
+  </Card>
+  <Card title="Transaction prompt" icon="image">
+    [TODO: Attach screenshot of the wallet transaction approval]
+  </Card>
+  <Card title="Result" icon="image">
+    [TODO: Attach screenshot of a confirmed trade/claim + explorer link]
+  </Card>
+</CardGroup>

@@ -1,0 +1,111 @@
+---
+title: "Program & Contracts"
+description: "The Solana program: IDs, instructions, accounts, access control, and events."
+---
+
+<Info>
+  This page is the authoritative reference for Microset's on-chain footprint. It
+  describes a single Anchor program, `prediction_market`. Reviewers should be able
+  to match every instruction and account here to the source and to the deployed
+  program on a Solana explorer.
+</Info>
+
+## Program identity
+
+| Field | Value |
+| --- | --- |
+| Program name | `prediction_market` (Anchor `0.30.1`) |
+| Program ID — contracts repo (`declare_id!`) | `EcncSdXCTy2RnpnZPXa1VPij1tjbS6wSjrwM47vFEN9e` |
+| Program ID — frontend config / IDL | `B6nzqfZfxJ2UyAGD7ko3zSa2QLF8aWNjHqjkDqh1dzsC` |
+| Cluster (repo default) | `devnet` (no mainnet entry in `Anchor.toml`) |
+| Explorer | [TODO: Add Solana Explorer / Solscan link for the deployed program ID] |
+
+<Warning>
+  The contracts repo and the frontend reference **different program IDs**. Confirm
+  the single production program ID, deploy it to the intended cluster (mainnet for
+  a public launch), and align the code and these docs before submission.
+</Warning>
+
+## Instructions
+
+| Instruction | Purpose | Who can call | Funds movement |
+| --- | --- | --- | --- |
+| `configure` | Create/update the global `Config` PDA (fees, policies, quote mints, resolution council) | Initial: a fixed expected initializer key; updates: current `config.authority` | Seeds rent + global vault |
+| `nominate_authority` | Step 1 of admin transfer — set `pending_authority` | Current `config.authority` | None |
+| `accept_authority` | Step 2 — pending admin accepts authority | `config.pending_authority` | None |
+| `add_whitelist_market_creator` | Whitelist a market creator (PDA `["wl-mkt", creator]`) | `config.authority` | Authority pays rent |
+| `remove_whitelist_market_creator` | Remove a whitelisted creator | `config.authority` | Rent refunded |
+| `mint_no_token` | Create the NO outcome mint + metadata, mint fixed supply to vault, revoke mint authority | Creator, subject to market-creation policy | Mints NO supply to vault |
+| `create_market` | Create the YES mint + `Market` PDA, mint initial reserves, revoke mint authority | Creator, subject to policy; `team_wallet` must match config | Mints YES reserves to vault |
+| `swap` | Buy/sell YES or NO against the per-side AMM | Any user | Quote ⇄ vault; tokens ⇄ vault; fee → `team_wallet` |
+| `add_liquidity` | Add quote-side liquidity | Any user; `team_wallet` must match config | Quote user → vault |
+| `withdraw_liquidity` | Withdraw a recorded LP position | The LP user; market not completed | Quote vault → user |
+| `claim_winnings` | Burn winning (or void both) tokens and pay proportional quote | Any user; market resolved/completed | Vault → user |
+| `resolution` | Set the winning side and mark the market completed | `config.authority` (if threshold 0) or an M-of-N resolution council | None (sets flags) |
+
+## Access control & admin powers
+
+<AccordionGroup>
+  <Accordion title="Authority">
+    A single global `Config` PDA (seeds `["config"]`) holds the `authority`.
+    Transfer is **two-step**: `nominate_authority` then `accept_authority`.
+    [TODO: state who holds the authority key — EOA keypair, multisig (e.g. Squads),
+    or timelock. A multisig materially reduces reviewer risk.]
+  </Accordion>
+  <Accordion title="Market-creation policy">
+    Configurable: `OPEN` (permissionless), `AUTHORITY_ONLY`, or `WHITELIST`
+    (gated by a per-creator PDA). [TODO: state the policy used in production.]
+  </Accordion>
+  <Accordion title="Fees">
+    Basis-point fees out of 10,000: `platform_buy_fee`, `platform_sell_fee`,
+    `lp_buy_fee`, `lp_sell_fee`. `configure` enforces buy total ≤ 10,000 bps and
+    sell total ≤ 10,000 bps. Fees are sent to `team_wallet`. [TODO: state the
+    production fee values and the `team_wallet` address.]
+  </Accordion>
+  <Accordion title="Resolution">
+    Markets resolve either by the authority (when `resolution_threshold == 0`) or
+    by an M-of-N council (up to 8 signers). Resolution also requires the market's
+    ending slot to have passed. [TODO: state the production threshold and council.]
+  </Accordion>
+</AccordionGroup>
+
+## Tokens & custody
+
+| Item | Detail |
+| --- | --- |
+| Outcome tokens | Per-market YES and NO SPL mints; fixed supply; mint authority revoked to `None` after init |
+| Quote asset | Per-market `quote_mint`: native SOL (when default pubkey) or a whitelisted SPL mint (e.g. a USD stablecoin) |
+| Custody | A program-owned global vault PDA (seeds `["global"]`) holds reserves; payouts are program-signed per on-chain rules |
+| Pricing | Per-side constant-product AMM (`x * y = k`) |
+| Payout | `claim_winnings` burns winning tokens and pays `amount × quote_reserves / token_reserves`; a VOID outcome refunds both sides |
+
+## Upgradeability
+
+| Property | Value |
+| --- | --- |
+| Proxy / delegatecall | N/A (not a Solana concept) |
+| Program upgradeable? | [TODO: Confirm] — Solana programs are upgradeable by default; confirm whether the deployed program retains an upgrade authority, who holds it (ideally a multisig), or whether it has been made immutable |
+
+## Events
+
+| Event | Emitted by |
+| --- | --- |
+| `CreateEvent` | `create_market` |
+| `TradeEvent` | `swap` |
+| `WithdrawEvent` | `withdraw_liquidity` |
+| `ResolutionSettledEvent` | `resolution` |
+| `ClaimWinningsEvent` | `claim_winnings` |
+
+## Cross-program invocations
+
+| Target program | Purpose |
+| --- | --- |
+| SPL Token Program | Mint, transfer, burn outcome/quote tokens |
+| Associated Token Program | Create associated token accounts |
+| Metaplex Token Metadata | NO-token metadata (in `mint_no_token`) |
+
+## Source & verification
+
+- Source repository: [INSERT GITHUB URL]
+- Verified build / on-chain match: [TODO: publish a verifiable build and link it; Solana supports verified builds via the Anchor / solana-verify tooling]
+- Audit: Not yet audited [TODO: confirm — no audit found in the repositories]

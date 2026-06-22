@@ -1,0 +1,91 @@
+---
+title: "Introduction"
+description: "What Microset is, and the context for this security review."
+---
+
+<Info>
+  This is the security and transparency documentation for Microset. It explains
+  what the dApp does, how users interact with it, the on-chain program it uses,
+  and its security and privacy practices. It is written to be useful to end users
+  as well as wallet security teams, automated risk engines, and integration
+  partners.
+</Info>
+
+## What is Microset
+
+Microset is a decentralized **prediction market** built on **Solana** using the
+[Anchor](https://www.anchor-lang.com/) framework. Users can take Yes/No positions
+on binary outcomes of real-world events (for example, sports matches), trade those
+positions against an on-chain automated market maker (AMM), and claim winnings
+once a market resolves.
+
+> **Primary purpose:** A non-custodial, on-chain binary prediction market —
+> create markets, trade Yes/No outcome tokens, provide liquidity, and settle
+> based on real-world results.
+
+Microset is **non-custodial**: users connect their own Solana wallet, and every
+on-chain action requires a transaction the user signs themselves. The program
+holds market reserves in program-derived vault accounts (PDAs) governed entirely
+by on-chain rules, not by an operator who can freely move user funds.
+
+## Intended users
+
+<CardGroup cols={2}>
+  <Card title="Traders" icon="users">
+    Users who connect a Solana wallet to trade Yes/No outcome positions and claim
+    winnings.
+  </Card>
+  <Card title="Reviewers" icon="shield-check">
+    Blockaid, Phantom, and other wallet/risk teams evaluating the dApp and the
+    address under review.
+  </Card>
+</CardGroup>
+
+## Technology
+
+| Layer | Technology |
+| --- | --- |
+| Smart contract | Solana program (Rust) built with Anchor `0.30.1` |
+| Token standard | SPL Token (Yes/No outcome mints + a quote asset) |
+| Market maker | Per-side constant-product AMM (on-chain) |
+| Wallet / auth | [Privy](https://www.privy.io/), Solana-only, external wallets |
+| Frontend | Expo / React Native app |
+| Backend | Node/Express API (`testapi.microset.io`), MongoDB |
+
+## On-chain program
+
+| Field | Value |
+| --- | --- |
+| Program ID (contracts repo, `declare_id!`) | `EcncSdXCTy2RnpnZPXa1VPij1tjbS6wSjrwM47vFEN9e` |
+| Program ID (frontend config / IDL) | `B6nzqfZfxJ2UyAGD7ko3zSa2QLF8aWNjHqjkDqh1dzsC` |
+| Default cluster (repo config) | `devnet` (no mainnet entry defined in `Anchor.toml`) |
+
+<Warning>
+  **Two issues to resolve before submitting this to a reviewer.**
+
+  1. The program ID in the contracts repository
+  (`EcncSdXCTy2RnpnZPXa1VPij1tjbS6wSjrwM47vFEN9e`) does **not** match the program
+  ID the frontend loads (`B6nzqfZfxJ2UyAGD7ko3zSa2QLF8aWNjHqjkDqh1dzsC`). Confirm
+  which program ID is actually deployed in production and make the docs and code
+  consistent.
+
+  2. The flagged address — `0x35cABAF63325a71cEC0b2C47e197e52D3735187a` — is an
+  **Ethereum-format** address. It does not appear anywhere in the Microset
+  codebase, which is Solana-only. See [Review Summary](/security/review-summary).
+</Warning>
+
+## Official links
+
+<Warning>
+  Treat only the links below as official. Any other site, domain, or social
+  account claiming to be Microset should be considered unaffiliated.
+</Warning>
+
+| Resource | Link |
+| --- | --- |
+| Website | https://microset.io |
+| API (current) | https://testapi.microset.io |
+| GitHub | [INSERT GITHUB URL] |
+| Solana explorer (program) | [TODO: Add Solana Explorer / Solscan link for the deployed program ID] |
+| Support email | tech@microset.io [TODO: confirm public support address] |
+| Audit report | Not yet audited [TODO: confirm — no audit found in the repositories] |
