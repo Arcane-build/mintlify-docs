@@ -1,0 +1,83 @@
+---
+title: "Create and Organize Analytics Dashboards in Microset"
+sidebarTitle: "Create Dashboard"
+description: "Learn how to create dashboards from scratch, add charts from any data source, arrange layouts with drag-and-drop, and configure dashboard settings."
+---
+
+Dashboards in Microset give you a single place to monitor the metrics that matter most to your team. You can build as many dashboards as you need — scoped to an audience, a workflow, or a question — and organize each one exactly how you want it.
+
+## Create a new dashboard
+
+<Steps>
+  <Step title="Open Dashboards">
+    Navigate to **Analytics → Dashboards** in the left sidebar.
+  </Step>
+  <Step title="Start a new dashboard">
+    Click **New dashboard** in the top-right corner of the Dashboards index page.
+  </Step>
+  <Step title="Name your dashboard">
+    Enter a name that reflects the audience or the central question the dashboard answers. Clear, specific names make navigation faster for everyone on your team.
+
+    | Example name | Best for |
+    |---|---|
+    | Revenue by region | Finance and sales leadership |
+    | Support queue health | Customer support managers |
+    | Weekly active users | Product and growth teams |
+  </Step>
+  <Step title="Add a description (optional)">
+    Use the description field to explain the dashboard's purpose, the data sources it draws from, or how often it is reviewed. Descriptions appear in the Dashboards index and in search results.
+  </Step>
+  <Step title="Confirm creation">
+    Click **Create**. Microset opens your new, empty dashboard and puts it in edit mode so you can start adding charts right away.
+  </Step>
+</Steps>
+
+## Add charts
+
+With your dashboard open, click **Add chart** in the toolbar to browse your saved charts or create a new one inline. Each chart is configured independently and can pull data from any connected data source — you are not limited to a single source per dashboard.
+
+Once you select a chart, it appears in the grid at a default size. You can add as many charts as the dashboard needs; there is no hard limit on chart count.
+
+<Tip>
+  Build charts in the **Charts** library first and then add them to dashboards. A single chart can live on multiple dashboards simultaneously, and any edit to the chart updates it everywhere it appears.
+</Tip>
+
+## Arrange the layout
+
+Every dashboard uses a **12-column grid** that lets you size and position charts precisely without writing any code.
+
+1. Click **Edit layout** in the dashboard toolbar to enter layout mode. A subtle grid overlay appears so you can see column boundaries.
+2. **Drag** any chart by its title bar to reposition it anywhere on the grid.
+3. **Resize** a chart by dragging its bottom-right corner handle. Charts snap to grid columns and row increments, keeping everything aligned automatically.
+4. When you are satisfied with the arrangement, click **Save layout** to persist the changes.
+
+<Info>
+  Layout changes are saved separately from chart configuration. Rearranging or resizing a chart on a dashboard does not modify the chart's underlying query, visualization type, or settings — those live in the chart itself.
+</Info>
+
+<Warning>
+  Leaving Edit layout mode without clicking **Save layout** discards all position and size changes made in that session.
+</Warning>
+
+## Dashboard settings
+
+Open the **⋯ menu** (top-right of any dashboard) to access the following settings:
+
+<CardGroup cols={2}>
+  <Card title="Rename" icon="pencil">
+    Update the dashboard name and description at any time. Changes take effect immediately and propagate to any workspace members viewing the dashboard.
+  </Card>
+  <Card title="Duplicate" icon="copy">
+    Create an exact copy of the dashboard, including all charts and their current layout. The duplicate opens immediately so you can customize it independently.
+  </Card>
+  <Card title="Auto-refresh" icon="arrows-rotate">
+    Set an automatic refresh interval for live monitoring: **30 seconds**, **1 minute**, or **5 minutes**. Microset re-runs all chart queries on the chosen cadence without any manual interaction.
+  </Card>
+  <Card title="Delete" icon="trash">
+    Permanently remove the dashboard. This action cannot be undone. Individual charts are **not** deleted — they remain available as standalone components in your Charts library.
+  </Card>
+</CardGroup>
+
+<Note>
+  Only workspace members with **Editor** or **Admin** roles can create, edit, or delete dashboards. Members with the **Viewer** role can interact with dashboards but cannot modify them.
+</Note>

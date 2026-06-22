@@ -1,0 +1,99 @@
+---
+title: "Microset platform concepts: workspaces, projects, roles"
+sidebarTitle: "Key Concepts"
+description: "Learn the four foundational building blocks of Microset — workspaces, projects, member roles, and API credentials — and how they relate to each other."
+---
+
+Before diving into configuration or integrations, it helps to understand how Microset is structured. Four concepts underpin everything on the platform: workspaces, projects, member roles, and API credentials. Getting these right from the start makes it much easier to manage access, organize work, and scale your setup over time.
+
+## Workspaces
+
+A workspace is the top-level container for your entire Microset environment. Every project, team member, setting, and billing subscription belongs to exactly one workspace.
+
+When you create your organization, Microset assigns it a **slug** — a short, URL-safe identifier (for example, `acme-corp`). The slug appears in:
+
+- The Microset web app URL: `app.microset.io/acme-corp/...`
+- Every REST API endpoint path: `/v1/workspaces/acme-corp/...`
+- Webhook payloads and audit log entries
+
+Because the slug is embedded in all your URLs and API calls, treat it as a stable identifier. Renaming it is possible but updates every existing link and integration endpoint automatically.
+
+<Note>
+  Each Microset account belongs to exactly one workspace. If you need strict data isolation between departments or customers, create separate workspaces under separate accounts.
+</Note>
+
+## Projects
+
+A project is the primary unit of work inside a workspace. Use projects to group related data, dashboards, and integrations around a single team, product, or initiative.
+
+Key characteristics of projects:
+
+- **Isolated by default** — Each project has its own members, settings, and data. Content from one project does not appear in another unless you explicitly share it.
+- **Flexible membership** — A user can belong to multiple projects simultaneously and hold a different role in each one.
+- **Independent settings** — Notification preferences, integration configurations, and data retention rules are all set at the project level and do not inherit the workspace defaults (except where noted in each feature's documentation).
+
+Think of the workspace as your building and each project as a room inside it. Workspace admins hold a master key; project members only have keys to the rooms they've been granted access to.
+
+## Members and roles
+
+Microset uses a two-tier permission model: roles are assigned at the workspace level and can be overridden at the project level.
+
+### Workspace-level roles
+
+| Role | Access level | Typical use |
+|---|---|---|
+| **Admin** | Full access — including billing, SSO configuration, workspace settings, and user management | IT administrators, team leads, or owners who need to manage the workspace itself |
+| **Member** | Can create and manage projects, invite users to projects they own, and use all workspace features | Active contributors and project owners |
+| **Viewer** | Read-only access to all shared workspace content; cannot create or modify projects or settings | Stakeholders, auditors, or clients who need visibility without edit rights |
+
+### Project-level role overrides
+
+When you add someone to a project, you can assign them a project-specific role that differs from their workspace role. A workspace Viewer, for example, can be promoted to a full editor inside a single project without gaining broader workspace permissions.
+
+<Info>
+  Project-level role assignments always take precedence over workspace-level roles. If a user is a workspace Member but a project Viewer, they have read-only access inside that project regardless of their workspace role.
+</Info>
+
+### Custom roles
+
+On Growth and Enterprise plans, you can define custom roles with a hand-picked set of permissions. Navigate to **Settings → Roles** to create and manage them. Custom roles can be assigned at both the workspace and project level.
+
+## API credentials
+
+API keys let external tools, scripts, and integrations authenticate with Microset on behalf of your workspace. You can generate and manage keys under **Settings → API**.
+
+Each API key has a **scope** that limits what it can do:
+
+| Scope | Permitted operations |
+|---|---|
+| **Read-only** | `GET` requests only — fetch data, list resources, export reports |
+| **Read-write** | Full API access — create, update, and delete resources in addition to reads |
+
+Follow these practices to keep your keys secure:
+
+- **Treat API keys like passwords.** Store them in a secrets manager or environment variable, never in source code or version control.
+- **Use the narrowest scope that meets your needs.** Grant read-write access only to integrations that must write data back to Microset.
+- **Rotate immediately if exposed.** If a key is committed to a public repository or logged in an insecure location, revoke it in **Settings → API** and generate a replacement before updating your integrations.
+
+<Warning>
+  Microset displays the full API key value only once — at the moment of creation. Copy it to your secrets manager immediately. If you lose the key, revoke it and create a new one.
+</Warning>
+
+## Next steps
+
+Now that you understand the core building blocks, explore these guides to configure your workspace and start getting value from Microset.
+
+<CardGroup cols={2}>
+  <Card title="Quickstart" icon="rocket" href="/platform/quickstart">
+    Follow the step-by-step setup guide to create your organization, invite teammates, and launch your first project.
+  </Card>
+  <Card title="Roles & Permissions" icon="shield-check" href="/platform/administration/roles-permissions">
+    Review the full permissions matrix and learn how to create custom roles on Growth and Enterprise plans.
+  </Card>
+  <Card title="Analytics" icon="chart-bar" href="/analytics/quickstart">
+    Connect your first data source, build a dashboard, and start exploring your team's metrics.
+  </Card>
+  <Card title="Integrations" icon="plug" href="/integrations/quickstart">
+    Link external tools to your workspace using Microset's connector library and webhook endpoints.
+  </Card>
+</CardGroup>

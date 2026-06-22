@@ -1,0 +1,92 @@
+---
+title: "Connect your first integration to Microset in minutes"
+sidebarTitle: "Quickstart"
+description: "Connect a pre-built integration from the Microset connector catalog. Steps are the same for most connector types — only the auth method varies."
+---
+
+Microset's connector catalog gives you ready-made integrations with the tools your team already uses. Once you connect an integration, Microset syncs data into your workspace automatically so your analytics and workflows stay up to date without manual imports.
+
+## Before you begin
+
+Make sure you have the following before you start:
+
+- **Admin or Member role** in your Microset workspace
+- **Credentials for the tool you're connecting** — this will be an API key, an OAuth app client ID and secret, or a service account credentials file, depending on the connector
+
+## Connect an integration
+
+<Steps>
+
+<Step title="Find your integration">
+Open the **Integrations** section in the left sidebar, then select **Catalog**. Use the search bar to find a specific tool by name, or browse by category to discover available connectors.
+
+Each connector card shows two key pieces of information:
+
+| Detail | What it tells you |
+|---|---|
+| **Auth method** | Whether the connector uses an API key, OAuth 2.0, or a service account |
+| **Sync capabilities** | Which data objects the connector can read or write (records, events, files, etc.) |
+
+Click the connector card to open its setup page.
+</Step>
+
+<Step title="Authenticate">
+Click **Connect** on the connector setup page. The authentication flow depends on the method the connector uses.
+
+<Tabs>
+  <Tab title="API key">
+    Locate your API key or personal access token in the external service's developer or account settings, then paste it into the **API key** field in Microset. Click **Save** to continue.
+  </Tab>
+  <Tab title="OAuth 2.0">
+    Click **Authorize**. Microset redirects you to the service's authorization page. Sign in with your account credentials, review the requested permissions, and click **Allow** or **Approve**. The service redirects you back to Microset automatically once access is granted.
+  </Tab>
+  <Tab title="Service account">
+    Upload your credentials file — typically a JSON key file exported from your cloud provider or enterprise SaaS admin console. Fill in any additional required fields that appear (such as a project ID or tenant domain), then click **Save**.
+  </Tab>
+</Tabs>
+
+For a detailed explanation of each method and guidance on credential rotation, see [Authentication Methods](/integrations/authentication).
+
+<Note>
+  Some connectors require you to allowlist Microset's outbound IP addresses in your external service's firewall or network settings before the connection can succeed. Check the connector's setup page for a list of IP addresses to allowlist.
+</Note>
+</Step>
+
+<Step title="Configure field mapping">
+After authenticating, Microset presents a field mapping screen. Map the fields from the connected tool to the corresponding fields in your Microset workspace data model.
+
+- **Default mappings** are pre-filled for common fields — review them to make sure they match your setup
+- **Required fields** are marked with an asterisk (\*) and must be mapped before you can save
+- **Optional fields** can be left unmapped if you don't need that data in Microset
+
+Adjust any mappings that don't match your data model, then click **Save mappings**.
+</Step>
+
+<Step title="Test the connection">
+Click **Test connection** on the final screen. Microset runs a sample sync that pulls a small number of records from the external service so you can confirm the data looks correct before enabling full syncs.
+
+<Tabs>
+  <Tab title="Test passed">
+    Microset displays a preview of the sample records. Review the data, then click **Enable integration** to activate regular syncs.
+  </Tab>
+  <Tab title="Test failed">
+    Microset shows an error message explaining what went wrong — for example, invalid credentials, missing permissions, or a blocked IP address. Follow the instructions in the error message to resolve the issue, then click **Retry**.
+  </Tab>
+</Tabs>
+</Step>
+
+</Steps>
+
+## Next steps
+
+<CardGroup cols={2}>
+  <Card title="Authentication Methods" icon="key" href="/integrations/authentication">
+    Learn how API keys, OAuth 2.0, and service accounts work — and how to rotate credentials safely.
+  </Card>
+  <Card title="CRM Connectors" icon="address-book" href="/integrations/connectors/crm">
+    Connect your CRM to sync contacts, deals, and pipeline data into your Microset workspace.
+  </Card>
+  <Card title="Configure Webhooks" icon="webhook" href="/integrations/webhooks/configure">
+    Set up webhooks to push real-time events from Microset to your own services and pipelines.
+  </Card>
+</CardGroup>

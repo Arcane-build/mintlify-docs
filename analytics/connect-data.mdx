@@ -1,0 +1,124 @@
+---
+title: "Add and Configure a Data Source in Microset Analytics"
+sidebarTitle: "Connect Data"
+description: "Learn how to add a database, data warehouse, or SaaS tool as a data source in Microset Analytics and configure sync frequency for your dashboards."
+---
+
+Before you can build dashboards or run queries in Microset Analytics, you need to connect at least one data source. A data source is a persistent, authenticated connection that Microset uses to retrieve data on demand or on a schedule. Once a source is saved, every member of your workspace can use it in charts and reports without re-entering credentials.
+
+## Supported sources
+
+Microset Analytics supports three categories of data source. Select the tab that matches what you want to connect.
+
+<Tabs>
+  <Tab title="Databases">
+    Connect directly to relational databases running in your own infrastructure or a managed cloud service.
+
+    | Source | Notes |
+    |---|---|
+    | **PostgreSQL** | Versions 11 and above. Supports SSL and SSH tunnels. |
+    | **MySQL / MariaDB** | MySQL 5.7+, MariaDB 10.3+. |
+    | **Microsoft SQL Server** | SQL Server 2017 and above. Windows authentication not supported. |
+    | **SQLite** | File upload only — drag a `.sqlite` or `.db` file directly into the source dialog. |
+    | **Oracle Database** | Oracle 19c and 21c. Requires the Oracle Instant Client hostname format. |
+
+    <Tip>
+      For PostgreSQL and MySQL sources, create a dedicated read-only database user for Microset. This limits the blast radius if credentials are ever rotated or exposed.
+    </Tip>
+  </Tab>
+  <Tab title="Data Warehouses">
+    Connect to cloud-native warehouses optimised for analytical workloads. Microset pushes queries down to the warehouse engine, so large datasets stay performant.
+
+    | Source | Notes |
+    |---|---|
+    | **Snowflake** | Authenticate with username/password or key-pair. Specify your account identifier (e.g. `xy12345.us-east-1`). |
+    | **Google BigQuery** | Authenticate via a service account JSON key. Microset requires `bigquery.jobs.create` and `bigquery.tables.getData` permissions. |
+    | **Amazon Redshift** | Connect using a cluster endpoint or Redshift Serverless workgroup URL. |
+    | **Databricks** | Provide your workspace hostname and a personal access token or service principal token. |
+    | **ClickHouse** | HTTP and native TCP interfaces supported. Recommended: HTTP interface on port 8443 with SSL. |
+
+    <Info>
+      BigQuery connections bill query costs to your Google Cloud project, not to Microset. Use BigQuery slot reservations or set query cost controls in your GCP project to avoid unexpected charges.
+    </Info>
+  </Tab>
+  <Tab title="SaaS Tools">
+    Pull data directly from third-party platforms using their APIs. SaaS connections authenticate with an API key or OAuth and do not require a hostname or port.
+
+    | Source | Authentication |
+    |---|---|
+    | **Salesforce** | OAuth 2.0 (connected app) or username + security token |
+    | **HubSpot** | Private app access token |
+    | **Stripe** | Restricted API key (read-only recommended) |
+    | **Google Analytics** | OAuth 2.0 via Google account; select a GA4 property during setup |
+    | **Zendesk** | API token with your Zendesk subdomain and agent email |
+
+    <Tip>
+      When generating API keys for SaaS sources, grant read-only or analytics-scoped permissions where the platform supports it. Microset never writes data back to a connected SaaS tool.
+    </Tip>
+  </Tab>
+</Tabs>
+
+## Connection settings
+
+When you add a new source at **Analytics → Data sources → Add source**, you fill in the following fields.
+
+| Field | Description |
+|---|---|
+| **Source name** | A human-readable label shown throughout Analytics (e.g. *Production Postgres* or *Stripe Live*). |
+| **Source type** | Select from the supported sources listed above. The form adjusts to show only the fields relevant to your chosen type. |
+| **Host / URL** | The hostname or endpoint of your database server or SaaS API (e.g. `db.example.com` or `myaccount.snowflakecomputing.com`). |
+| **Port** | Pre-filled with the default port for common sources (PostgreSQL: 5432, MySQL: 3306, SQL Server: 1433). Override if your setup uses a non-standard port. |
+| **Database / Schema** | The specific database name or schema Microset should connect to. For warehouses, this is typically your default schema or dataset name. |
+| **Username / API key** | The credential used to authenticate. For SaaS tools, paste the API key or token here. |
+| **Password / Secret** | Stored encrypted at rest using AES-256. Microset never displays this value again after you save — to update it, click **Edit source** and enter a new value. |
+| **SSL mode** | Controls whether the connection uses SSL/TLS. Options: **Require** (encrypted; connection fails if SSL is unavailable), **Prefer** (encrypted if available, plain-text fallback), **Disable** (no encryption). |
+
+<Warning>
+  Use **Require** SSL mode for any production data source. **Prefer** and **Disable** are intended for local development environments only and should not be used with sources that contain sensitive or regulated data.
+</Warning>
+
+Click **Test connection** after filling in the form. Microset validates your credentials and network reachability before saving. If the test fails, the error message includes a reason code — for example, `AUTH_FAILED` (wrong username or password) or `HOST_UNREACHABLE` (firewall or DNS issue). Correct the indicated field and test again before saving.
+
+## Sync frequency
+
+Sync frequency controls how Microset fetches data from your source and how fresh the data in your dashboards will be.
+
+**Real-time**
+
+Microset runs a live query against your source every time a dashboard loads or a chart refreshes. There is no caching layer — viewers always see the most current data. Choose real-time for sources with low query latency, good indexing, and no strict rate limits (most transactional databases and warehouses work well here).
+
+**Scheduled sync**
+
+Microset fetches data from your source at a fixed interval and caches the results. Charts load instantly from the cache between sync runs. Available intervals: **15 minutes**, **1 hour**, **6 hours**, and **Daily**.
+
+Choose scheduled sync for large datasets where live queries would be slow, or for SaaS APIs that impose rate limits on frequent polling.
+
+<Info>
+  Available sync intervals depend on your Microset plan. **Free plan** workspaces are limited to daily sync only. Upgrade to a paid plan to unlock 15-minute, 1-hour, and 6-hour intervals.
+</Info>
+
+**Manual**
+
+Microset fetches data only when you click **Refresh** on a dashboard or trigger a sync from the Data sources list. No background polling occurs. Manual sync is suitable for one-off data imports, static reference datasets, or situations where you want full control over when data is updated.
+
+| Mode | Data freshness | Best for |
+|---|---|---|
+| Real-time | Always current | Low-latency indexed sources, operational monitoring |
+| Scheduled sync | Up to interval age | Large datasets, rate-limited APIs, cost-sensitive warehouses |
+| Manual | As of last refresh | One-off imports, static datasets, ad-hoc analysis |
+
+## Next steps
+
+With your data source connected, you are ready to start building dashboards and reports.
+
+<CardGroup cols={2}>
+  <Card title="Analytics Quickstart" icon="rocket" href="/analytics/quickstart">
+    Follow a step-by-step walkthrough to create your first dashboard and share it with your team.
+  </Card>
+  <Card title="Create a Dashboard" icon="chart-bar" href="/analytics/dashboards/create-dashboard">
+    Organise charts into polished dashboards with filters, layouts, and drill-down controls.
+  </Card>
+  <Card title="Schedule Reports" icon="calendar" href="/analytics/reports/scheduled-reports">
+    Automatically deliver dashboard snapshots to your team via email or Slack on a recurring schedule.
+  </Card>
+</CardGroup>

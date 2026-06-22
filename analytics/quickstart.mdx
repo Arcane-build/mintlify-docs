@@ -1,0 +1,84 @@
+---
+title: "Microset Analytics Quickstart: Dashboards in Minutes"
+sidebarTitle: "Quickstart"
+description: "Connect a data source, build your first dashboard, and share a live chart with your team in under ten minutes using Microset Analytics."
+---
+
+Microset Analytics gives you a direct path from raw data to shareable dashboards without writing a single line of SQL (unless you want to). This guide walks you through connecting a data source, creating a dashboard, adding a chart, and sharing it with your team.
+
+## Before you begin
+
+Make sure you have the following ready before you start:
+
+- **Data source credentials** — hostname, username, password, or API key for the source you plan to connect
+- **Admin or Member role** in your Microset workspace (Viewer-only accounts cannot add data sources)
+
+<Note>
+  If your data source sits behind a firewall, allowlist the Microset outbound IP addresses before testing a connection. You can find the full list under **Workspace Settings → Network → Outbound IPs**.
+</Note>
+
+## Steps
+
+<Steps>
+  <Step title="Connect a data source">
+    Open **Analytics** in the left sidebar, then go to **Data sources → Add source**.
+
+    Select the source type that matches your database, warehouse, or SaaS tool. Enter your credentials — hostname, port, database name, username, and password (or API key for SaaS sources). Click **Test connection** to validate the credentials before saving.
+
+    Once the test passes, click **Save source**. Your new source appears in the Data sources list and is immediately available for charts.
+
+    For a full walkthrough of every source type and all connection options, see [Connect Data](/analytics/connect-data).
+  </Step>
+
+  <Step title="Create a dashboard">
+    Go to **Analytics → Dashboards → New dashboard**.
+
+    Give your dashboard a meaningful name — something your team will recognise at a glance, such as *Sales Pipeline – Q3* or *API Health Overview*. Choose a folder if your workspace uses them to organise dashboards, then click **Create**.
+
+    You now have a blank canvas ready to receive charts.
+  </Step>
+
+  <Step title="Add a chart">
+    Inside your new dashboard, click **Add chart** in the top-right corner.
+
+    1. **Select a data source** — choose the source you connected in Step 1.
+    2. **Write or build a query** — use the visual query builder or switch to SQL mode to filter, aggregate, and join your data.
+    3. **Choose a chart type** — pick from **Bar**, **Line**, **Area**, **Pie**, or **Number card** depending on what best represents your metric.
+    4. **Configure axes** — for bar and line charts, map your x-axis to a time or category column and your y-axis to a numeric measure. Number cards show a single aggregated value.
+    5. Click **Save chart** to add it to the dashboard.
+
+    <Tip>
+      Use a **Number card** for top-level KPIs — a single bold figure draws attention to the metrics that matter most before viewers scroll to the detailed charts.
+    </Tip>
+  </Step>
+
+  <Step title="Share your dashboard">
+    Click the **Share** button in the dashboard header.
+
+    | Option | What it does |
+    |---|---|
+    | **Copy link** | Generates a direct URL. Respects workspace access controls. |
+    | **Embed code** | Produces an `<iframe>` snippet you can paste into any web page or internal tool. |
+    | **Access level** | Set to *Workspace* (anyone in your org), *Link* (anyone with the URL), or *Private* (only you). |
+
+    Recipients with workspace access see live data every time they open the link. Embedded dashboards refresh on the schedule configured for each chart's data source.
+
+    <Warning>
+      Setting access level to **Link** makes the dashboard readable by anyone who has the URL, including people outside your workspace. Only use this for public-facing data.
+    </Warning>
+  </Step>
+</Steps>
+
+## Next steps
+
+<CardGroup cols={2}>
+  <Card title="Connect Data" icon="database" href="/analytics/connect-data">
+    Explore every supported source type and learn how to configure authentication, SSL, and sync frequency.
+  </Card>
+  <Card title="Create a Dashboard" icon="chart-bar" href="/analytics/dashboards/create-dashboard">
+    Organise charts into polished dashboards with filters, layouts, and drill-down controls.
+  </Card>
+  <Card title="Schedule Reports" icon="calendar" href="/analytics/reports/scheduled-reports">
+    Automatically deliver dashboard snapshots to your team via email or Slack on a recurring schedule.
+  </Card>
+</CardGroup>

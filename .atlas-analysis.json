@@ -1,0 +1,94 @@
+{
+  "projectType": "saas",
+  "projectName": "Microset",
+  "projectDescription": "A SaaS platform that provides workspace management, analytics dashboards, and third-party integrations for teams.",
+  "theme": "almond",
+  "primaryColor": "#166E3F",
+  "lightColor": "#26BD6C",
+  "darkColor": "#166E3F",
+  "navigation": {
+    "tabs": [
+      {
+        "tab": "Platform",
+        "groups": [
+          {
+            "group": "Get Started",
+            "pages": [
+              "platform/quickstart",
+              "platform/key-concepts"
+            ]
+          },
+          {
+            "group": "Configuration",
+            "pages": [
+              "platform/configuration/settings",
+              "platform/configuration/user-management",
+              "platform/administration/roles-permissions"
+            ]
+          }
+        ]
+      },
+      {
+        "tab": "Analytics",
+        "groups": [
+          {
+            "group": "Get Started",
+            "pages": [
+              "analytics/quickstart",
+              "analytics/connect-data"
+            ]
+          },
+          {
+            "group": "Dashboards & Reports",
+            "pages": [
+              "analytics/dashboards/create-dashboard",
+              "analytics/reports/scheduled-reports"
+            ]
+          }
+        ]
+      },
+      {
+        "tab": "Integrations",
+        "groups": [
+          {
+            "group": "Get Started",
+            "pages": [
+              "integrations/quickstart",
+              "integrations/authentication"
+            ]
+          },
+          {
+            "group": "Connectors & Webhooks",
+            "pages": [
+              "integrations/connectors/crm",
+              "integrations/webhooks/configure"
+            ]
+          }
+        ]
+      }
+    ]
+  },
+  "keyFeatures": [
+    "Workspace and project management with role-based access control",
+    "Analytics dashboards with drag-and-drop chart builder",
+    "Multi-source data connectivity (databases, data warehouses, SaaS tools)",
+    "Scheduled report delivery via email and Slack",
+    "Pre-built CRM connectors for Salesforce, HubSpot, Pipedrive, and more",
+    "Event-driven webhooks with HMAC-SHA256 signature verification",
+    "OAuth 2.0, API key, and service account authentication for integrations",
+    "SSO via SAML 2.0 / OIDC and IP allowlisting for workspace security"
+  ],
+  "publicApiSurface": [
+    "GET /workspaces",
+    "POST /workspaces",
+    "GET /projects",
+    "POST /projects",
+    "GET /analytics/data-sources",
+    "POST /analytics/data-sources",
+    "GET /analytics/dashboards",
+    "POST /analytics/dashboards",
+    "GET /integrations/connectors",
+    "POST /integrations/webhooks/endpoints",
+    "X-Signature-256 webhook signature header (HMAC-SHA256)"
+  ]
+}

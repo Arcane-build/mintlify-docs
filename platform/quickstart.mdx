@@ -1,0 +1,103 @@
+---
+title: "Microset quickstart: set up your workspace and projects"
+sidebarTitle: "Quickstart"
+description: "Learn how to create your organization, configure workspace settings, invite teammates, and set up your first project in Microset in minutes."
+---
+
+Getting your Microset workspace ready takes just a few minutes. This guide walks you through every step — from naming your organization to launching your first project — so your team can start working right away.
+
+<Note>
+  If your organization requires IT involvement for SSO configuration, DNS changes, or firewall allowlisting, kick off those requests in parallel while you complete the steps below. None of the IT tasks block the initial workspace setup.
+</Note>
+
+## Set up your workspace
+
+<Steps>
+  <Step title="Create your organization">
+    When you first sign in to Microset, the setup wizard prompts you to create an organization.
+
+    - **Organization name** — Enter the full, human-readable name of your company or team (for example, *Acme Corp* or *Platform Engineering*). This name appears in the Microset UI, notification emails, and billing documents.
+    - **Slug** — Microset auto-generates a URL-safe slug from your organization name (for example, `acme-corp`). The slug identifies your workspace in every URL and API call, so choose something short and stable. You can edit it now, but changing it later updates all existing links and API endpoints.
+
+    Click **Create organization** to continue.
+  </Step>
+
+  <Step title="Configure general settings">
+    After your organization is created, fine-tune the workspace defaults under **Settings → General**.
+
+    | Setting | What it controls |
+    |---|---|
+    | **Workspace name** | The display name shown across the UI and in emails |
+    | **Timezone** | The default timezone used for scheduling, reports, and activity timestamps |
+    | **Date format** | How dates appear throughout the platform (MM/DD/YYYY, DD/MM/YYYY, or ISO 8601) |
+    | **Display language** | The UI language for all workspace members who haven't set a personal preference |
+
+    Make your changes and click **Save changes** before moving on.
+
+    <Tip>
+      Set the timezone to match the location where most of your team works. Individual members can override it in their personal profile settings without affecting the workspace default.
+    </Tip>
+  </Step>
+
+  <Step title="Invite teammates">
+    Open **Settings → Users** to bring your colleagues into the workspace.
+
+    1. Click **Invite members**.
+    2. Enter one or more email addresses, separated by commas or line breaks.
+    3. Select a workspace-level role for each invitee:
+
+    <Tabs>
+      <Tab title="Admin">
+        Full access to all workspace settings, projects, billing, and user management. Assign this role to team leads or IT administrators who need to manage the workspace itself.
+      </Tab>
+      <Tab title="Member">
+        Can create and manage projects, invite users to projects they own, and access all shared resources. This is the right starting role for most active contributors.
+      </Tab>
+      <Tab title="Viewer">
+        Read-only access across the workspace. Viewers cannot create projects or modify any settings. Use this role for stakeholders who need visibility without edit access.
+      </Tab>
+    </Tabs>
+
+    4. Click **Send invites**. Each invitee receives an email with a sign-in link valid for 48 hours.
+
+    <Note>
+      You can change a member's role at any time from the **Settings → Users** table. Role changes take effect immediately.
+    </Note>
+  </Step>
+
+  <Step title="Set up your first project">
+    Projects are the primary unit of work in Microset. Create your first one from the main dashboard.
+
+    1. Click **New project** in the left sidebar or on the dashboard home screen.
+    2. Fill in the project details:
+       - **Name** — A concise, descriptive name for the project (for example, *Q3 Analytics* or *Infrastructure Migration*).
+       - **Description** — A short summary of the project's purpose. This text appears in search results and the project list, so make it scannable.
+    3. Under **Initial members**, add teammates you invited in the previous step. You can also leave this blank and add members after creation.
+    4. Click **Create project**.
+
+    Microset opens your new project dashboard automatically. From here you can configure project-specific settings, connect integrations, and start adding data.
+
+    <Tip>
+      You can create as many projects as your plan allows. Keep projects focused on a single workstream or team so that permissions and reporting stay clean.
+    </Tip>
+  </Step>
+</Steps>
+
+## Next steps
+
+Your workspace is ready. Explore these topics to get the most out of Microset.
+
+<CardGroup cols={2}>
+  <Card title="Core Concepts" icon="book-open" href="/platform/key-concepts">
+    Understand how workspaces, projects, roles, and API credentials fit together before diving deeper.
+  </Card>
+  <Card title="General Settings" icon="sliders" href="/platform/configuration/settings">
+    Review every workspace-level setting available under Settings → General.
+  </Card>
+  <Card title="User Management" icon="users" href="/platform/configuration/user-management">
+    Manage members, resend invites, deactivate accounts, and audit user activity.
+  </Card>
+  <Card title="Roles & Permissions" icon="shield-check" href="/platform/administration/roles-permissions">
+    Explore the full permissions matrix and learn how to configure custom roles on higher plans.
+  </Card>
+</CardGroup>

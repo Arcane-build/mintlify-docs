@@ -1,0 +1,90 @@
+---
+title: "Manage Users and Team Members in Your Microset Workspace"
+sidebarTitle: "User Management"
+description: "Invite members by email, deactivate accounts without data loss, and bulk-import larger teams via CSV from the Microset Users settings page."
+---
+
+As a workspace admin, you control the full lifecycle of team membership from a single location — **Settings → Users**. This page walks you through inviting new members, deactivating accounts when someone leaves, and importing a large team all at once using a CSV file.
+
+<Info>
+  The workspace-level role you assign during invitation sets a default. After a member accepts, you can override their role on any individual project without changing their workspace-level access. See [Roles & Permissions](/platform/administration/roles-permissions) for details.
+</Info>
+
+## Invite Members by Email
+
+Inviting members by email is the fastest way to bring individuals or small groups into your workspace.
+
+<Steps>
+  <Step title="Open the invite panel">
+    Navigate to **Settings → Users → Invite members**.
+  </Step>
+  <Step title="Enter email addresses">
+    Type one or more email addresses in the input field, separated by commas. You can paste a comma-separated list directly from a spreadsheet or contact list.
+  </Step>
+  <Step title="Select a workspace role">
+    Choose the role each invited member should receive: **Admin**, **Member**, or **Viewer**. If you are inviting a mixed group with different roles, send separate invitations for each role level.
+  </Step>
+  <Step title="Send the invitations">
+    Click **Send invitations**. Each address receives an email with a unique sign-up link.
+  </Step>
+</Steps>
+
+<Note>
+  Invitation links expire after **72 hours**. If a member misses the window, find their entry in the **Pending invites** list under Settings → Users and click **Resend** to issue a fresh link.
+</Note>
+
+## Deactivate Accounts
+
+When a team member leaves your organization, deactivating their account immediately revokes their access to the workspace without deleting any of their data or content. Every item they created — projects, comments, files, and settings they configured — remains intact and fully accessible to other members.
+
+<Steps>
+  <Step title="Locate the member">
+    Navigate to **Settings → Users** and find the member you want to deactivate. Use the search bar to filter by name or email address.
+  </Step>
+  <Step title="Open the member menu">
+    Click the **⋯** (more options) button on the member's row.
+  </Step>
+  <Step title="Deactivate the account">
+    Select **Deactivate account** and confirm the action in the dialog that appears.
+  </Step>
+</Steps>
+
+The member's status changes to **Deactivated** immediately and their active sessions are invalidated. They will not be able to log in until the account is reactivated.
+
+<Tip>
+  To reactivate a deactivated account, return to **Settings → Users**, filter by **Deactivated**, click **⋯** on the member's row, and select **Reactivate**. Their original workspace role and all project memberships are fully restored — no need to reconfigure anything.
+</Tip>
+
+## Bulk CSV Import
+
+When you are onboarding a larger team at once, uploading a CSV file is faster than sending individual invitations. Microset reads the file and dispatches invitations to every valid address it finds.
+
+Download the CSV template from the **Settings → Users** page by clicking **Import via CSV → Download template** to ensure your file uses the correct column names and format.
+
+### Required and optional columns
+
+| Column | Required | Description |
+|---|---|---|
+| `email` | ✅ Yes | The member's work email address. Must be unique within the workspace. |
+| `role` | ✅ Yes | Workspace role to assign: `admin`, `member`, or `viewer` (case-insensitive). |
+| `first_name` | No | Pre-fills the member's display name on their profile. |
+| `last_name` | No | Pre-fills the member's last name on their profile. |
+
+<Steps>
+  <Step title="Prepare your CSV file">
+    Open the downloaded template and populate each row with the member's details. Save the file in CSV format (UTF-8 encoding recommended for names with special characters).
+  </Step>
+  <Step title="Upload the file">
+    Navigate to **Settings → Users → Import via CSV** and click **Choose file**, then select your prepared CSV.
+  </Step>
+  <Step title="Review the preview">
+    Microset displays a preview table showing how it will parse each row. Rows with formatting errors are highlighted — correct those in your file and re-upload if needed.
+  </Step>
+  <Step title="Confirm the import">
+    Click **Import members**. Invitations are sent immediately to every valid email address in the file.
+  </Step>
+</Steps>
+
+<Warning>
+  CSV import sends invitations **immediately** when you click **Import members**. There is no draft or scheduled import mode. Review the preview table carefully before confirming, especially if you are importing hundreds of addresses at once.
+</Warning>

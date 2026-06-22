@@ -1,0 +1,123 @@
+---
+title: "Configure Webhooks to Receive and Verify Microset Events"
+sidebarTitle: "Configure Webhooks"
+description: "Register an HTTPS endpoint, select the events you need, and verify request signatures to securely receive real-time Microset event payloads."
+---
+
+Webhooks deliver HTTP POST requests to a URL you control whenever a selected event occurs in Microset. This guide walks you through registering a new endpoint, choosing your events, verifying request signatures, and confirming delivery end to end — no polling required.
+
+## Configure a webhook endpoint
+
+<Steps>
+  <Step title="Create your endpoint URL">
+    Before registering anything in Microset, make sure the URL you plan to use meets these requirements:
+
+    - **Publicly accessible** over the internet — Microset cannot reach private or localhost addresses in production.
+    - **HTTPS only** — plain HTTP endpoints are rejected.
+    - **Responds with a 2xx status within 10 seconds** — requests that time out are treated as failed deliveries.
+
+    If your processing logic takes longer than 10 seconds, acknowledge the webhook immediately with a `200 OK` response and hand the payload off to a background queue or worker for asynchronous processing.
+
+    <Tabs>
+      <Tab title="Local development">
+        Use [ngrok](https://ngrok.com) to expose a local server to the internet during development:
+
+        ```bash
+        ngrok http 3000
+        ```
+
+        Copy the generated `https://` forwarding URL and use it as your endpoint while testing. Remember to replace it with your production URL before going live.
+      </Tab>
+      <Tab title="Production">
+        Cloud functions are a lightweight, scalable choice for webhook receivers. Providers like AWS Lambda (with a Function URL), Google Cloud Functions, or Vercel Serverless Functions give you an HTTPS endpoint with no server management.
+      </Tab>
+    </Tabs>
+  </Step>
+
+  <Step title="Register the endpoint">
+    Add your URL to Microset so the platform knows where to send events.
+
+    **Using the dashboard:**
+
+    1. Go to **Integrations → Webhooks** and click **Add endpoint**.
+    2. Enter your HTTPS URL in the **Endpoint URL** field.
+    3. Optionally, add a **Description** to remind your team what this endpoint handles.
+    4. Click **Create**.
+
+    **Using the API:**
+
+    ```bash
+    curl -X POST https://api.microset.io/integrations/webhooks/endpoints \
+      -H "Authorization: Bearer <YOUR_API_TOKEN>" \
+      -H "Content-Type: application/json" \
+      -d '{
+        "url": "https://your-server.example.com/webhook",
+        "description": "Production event receiver"
+      }'
+    ```
+
+    The `POST /integrations/webhooks/endpoints` endpoint accepts a `url` (required) and an optional `description`. On success it returns the new endpoint object, including its `id` and generated secret.
+
+    Microset generates a unique endpoint secret at this point. **Copy and store it securely now** — it is shown only once.
+  </Step>
+
+  <Step title="Select events">
+    Open the endpoint you just created and click **Add events**. You can subscribe to:
+
+    - **All events** — your endpoint receives every event type Microset emits, including future additions.
+    - **Individual event types** — select only the events relevant to your integration for a lower request volume.
+
+    <Info>
+      Each event type has a distinct payload schema. Check the **Event catalog** tab under **Integrations → Webhooks** in the Microset dashboard for a full list of available event types, their field descriptions, and sample payloads.
+    </Info>
+  </Step>
+
+  <Step title="Verify the signature header">
+    Every request Microset sends includes an `X-Signature-256` header containing an HMAC-SHA256 signature of the raw request body, signed with your endpoint's secret key. Always verify this signature before processing a payload to confirm the request genuinely came from Microset.
+
+    ```python
+    import hmac
+    import hashlib
+
+    def verify_signature(payload_body: bytes, secret: str, signature_header: str) -> bool:
+        expected = hmac.new(
+            secret.encode(),
+            payload_body,
+            hashlib.sha256
+        ).hexdigest()
+        return hmac.compare_digest(f"sha256={expected}", signature_header)
+    ```
+
+    Call this function before acting on any incoming payload:
+
+    ```python
+    # In your webhook handler
+    is_valid = verify_signature(
+        payload_body=request.body,       # raw bytes, not parsed JSON
+        secret=MICROSET_ENDPOINT_SECRET, # loaded from an environment variable
+        signature_header=request.headers.get("X-Signature-256", "")
+    )
+
+    if not is_valid:
+        return Response(status=401)
+    ```
+
+    <Note>
+      Always read the signature from the raw request body before any JSON parsing. Reformatting or re-serializing the payload changes its bytes and will cause signature verification to fail.
+    </Note>
+  </Step>
+
+  <Step title="Test with a sample payload">
+    Send a test event to confirm your endpoint is reachable and your verification logic works:
+
+    1. Open the endpoint detail page and click **Send test event**.
+    2. Select the event type you want to simulate.
+    3. Click **Send**.
+
+    Microset delivers a sample payload to your endpoint and displays the HTTP response status and body in the **Test log** panel. A `200` status confirms end-to-end delivery. If you see a non-2xx response or a timeout, check your server logs and review the requirements in Step 1.
+  </Step>
+</Steps>
+
+<Warning>
+  Never expose your endpoint secret in client-side code, public repositories, or unencrypted configuration files. If your secret is compromised, rotate it immediately by navigating to **Integrations → Webhooks → [Your Endpoint] → Rotate secret**. Microset will begin signing new requests with the rotated secret; update your server environment variable before rotating to avoid a gap in verification.
+</Warning>

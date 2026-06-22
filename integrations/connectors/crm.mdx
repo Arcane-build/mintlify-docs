@@ -1,0 +1,82 @@
+---
+title: "CRM Connectors: Sync Your Sales Data with Microset"
+sidebarTitle: "CRM Connectors"
+description: "Sync contacts, deal pipelines, and activity history from your CRM into Microset to build dashboards and reports without writing custom code."
+---
+
+CRM connectors pull contact records, deal pipelines, and activity history directly into Microset so you can build dashboards and reports without writing custom code. Once connected, your CRM data stays current through scheduled or real-time syncs, giving your team a single place to explore and act on sales data.
+
+## Supported CRM systems
+
+Microset supports the following CRM platforms out of the box:
+
+- Salesforce
+- HubSpot
+- Pipedrive
+- Zoho CRM
+- Microsoft Dynamics 365
+
+## Set up a CRM connector
+
+<Steps>
+  <Step title="Connect your CRM">
+    Navigate to **Integrations → Catalog → CRM**, select your CRM system, and click **Connect**.
+
+    Most systems authenticate via OAuth 2.0 — you will be redirected to your CRM to grant access and then returned to Microset automatically. Pipedrive and some Zoho configurations use an API key instead; enter your key in the field provided and click **Save**.
+  </Step>
+
+  <Step title="Select objects to sync">
+    After connecting, choose which CRM objects to import into Microset. Available objects include:
+
+    - **Contacts**
+    - **Companies**
+    - **Deals**
+    - **Activities**
+    - **Custom objects** (where supported by your CRM)
+
+    <Info>
+      Only the objects you select count against your workspace's record limits. Deselect any objects you do not need to keep your usage lean.
+    </Info>
+  </Step>
+
+  <Step title="Configure field mapping">
+    Open the **Field mapping** editor to control how CRM fields translate into the Microset data model.
+
+    Standard fields — including name, email, deal stage, and close date — are mapped automatically. For any remaining fields, drag a CRM field from the left panel onto its corresponding destination field on the right. Unmapped fields are not synced.
+
+    <Tip>
+      Review your custom object fields carefully before the initial sync. Any field left unmapped will be absent from your dashboards until you update the mapping and run a new sync.
+    </Tip>
+  </Step>
+
+  <Step title="Run the initial sync">
+    Click **Start sync** to begin importing your data. The first sync pulls all historical records from your CRM, which may take several minutes for large datasets. A progress indicator shows the current status on the connector detail page.
+
+    All subsequent syncs are incremental — only records created or updated since the last sync are transferred.
+  </Step>
+</Steps>
+
+## Field mapping editor
+
+The field mapping editor gives you full control over how CRM data lands in Microset. CRM source fields appear on the left; Microset destination fields appear on the right. Drag a source field onto a destination field to create a mapping, or use the search bar to locate specific fields quickly.
+
+Keep the following rules in mind when configuring mappings:
+
+- **Unmapped fields are not synced.** If a field does not appear in your Microset dashboards, check that it has a mapping entry.
+- **Changes take effect on the next sync.** Updating a mapping does not retroactively reprocess already-synced records. Trigger a manual sync from the connector detail page to apply changes immediately.
+- **Field types must be compatible.** Mapping a text field to a numeric destination field will cause validation errors on import. The editor highlights incompatible pairings with a warning icon.
+
+## Sync intervals
+
+Choose a sync interval that matches how frequently your team needs fresh data. You can update the interval at any time from the connector settings page.
+
+| Interval | Use case |
+|---|---|
+| Real-time (webhook-based) | Available for Salesforce and HubSpot. Changes in your CRM trigger an immediate sync with no polling delay. |
+| Every 15 minutes | Well-suited for active sales teams that need near-current pipeline visibility throughout the day. |
+| Hourly | Appropriate for most reporting and analytics use cases where minute-level freshness is not required. |
+| Daily | Best for stable datasets, historical analysis, or low-priority syncs where bandwidth usage matters. |
+
+<Note>
+  Real-time sync requires that your CRM is configured to send outbound webhook notifications to Microset. Salesforce and HubSpot handle this automatically during OAuth authorization. For other systems, consult your CRM's documentation on outbound webhooks.
+</Note>
