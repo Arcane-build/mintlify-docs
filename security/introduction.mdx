@@ -19,6 +19,10 @@ real-world events (for example, cricket matches). It is **parimutuel**: all stak
 for a market are pooled, and when the market resolves, everyone who picked the
 winning outcome shares the pool, minus a protocol fee.
 
+<Frame caption="The Microset app — real-time cricket predictions">
+  <img src="/images/app-home.png" alt="Microset app home — real-time cricket prediction markets" />
+</Frame>
+
 > **Primary purpose:** A non-custodial, on-chain parimutuel prediction market —
 > stake on event outcomes and settle based on real-world results.
 
@@ -26,6 +30,13 @@ Microset is **non-custodial**: users connect their own Solana wallet, and every
 on-chain action requires a transaction the user signs themselves. The program
 holds market reserves in program-derived vault accounts (PDAs) governed entirely
 by on-chain rules, not by an operator who can freely move user funds.
+
+<Note>
+  **Market resolution.** Microset does not decide outcomes itself. Markets are
+  resolved using **trusted third-party data APIs** (such as the Roanuz Sports API
+  for cricket) — when the official data source reports a final result, that result
+  drives on-chain resolution. See [Program & Contracts](/security/contracts).
+</Note>
 
 ## Intended users
 
