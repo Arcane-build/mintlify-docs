@@ -20,7 +20,7 @@ Backpack, and other Wallet-Standard wallets). Embedded-wallet creation is disabl
   </Step>
   <Step title="User connects a Solana wallet">
     Privy prompts the user to connect an existing Solana wallet. No funds move at
-    this step. [INSERT screenshot of the connect prompt].
+    this step.
   </Step>
   <Step title="User signs a sign-in message">
     To authenticate with the backend, the wallet is asked to sign a human-readable
@@ -28,9 +28,9 @@ Backpack, and other Wallet-Standard wallets). Embedded-wallet creation is disabl
     `signMessage` request — it authorizes nothing on-chain and moves no funds. The
     backend verifies the signature and issues a session JWT.
   </Step>
-  <Step title="(Optional) Quick-bet session">
-    To avoid re-prompting on every bet, the user can sign once to create an
-    on-chain quick-bet session funded with a spend cap they choose. Bets are then
+  <Step title="(Optional) Quick-prediction session">
+    To avoid re-prompting on every prediction, the user can sign once to create an
+    on-chain quick-prediction session funded with a spend cap they choose. Predictions are then
     placed from that capped escrow. The user can withdraw unused funds or revoke
     the session at any time.
   </Step>
@@ -39,14 +39,14 @@ Backpack, and other Wallet-Standard wallets). Embedded-wallet creation is disabl
 ## Getting test SOL
 
 While Microset runs on Solana **devnet**, you can fund your wallet with free
-devnet SOL to place bets and pay transaction fees.
+devnet SOL to make predictions and pay transaction fees.
 
 <Card title="Solana Faucet" icon="droplet" href="https://faucet.solana.com/">
   Request devnet SOL at faucet.solana.com — paste your wallet address and choose
   the devnet network.
 </Card>
 
-## Bet / claim transaction flow
+## Prediction / claim transaction flow
 
 <Steps>
   <Step title="User selects a market and outcome">
@@ -54,12 +54,11 @@ devnet SOL to place bets and pay transaction fees.
   </Step>
   <Step title="App builds a Solana transaction">
     The app constructs the `place_bet` instruction (or `place_bet_with_delegate`
-    for a quick-bet session) using the program IDL. Parameters match the displayed
+    for a quick-prediction session) using the program IDL. Parameters match the displayed
     action.
   </Step>
   <Step title="Wallet shows the transaction">
-    The Solana wallet displays the instruction and accounts for review. [INSERT
-    screenshot of the wallet transaction prompt].
+    The Solana wallet displays the instruction and accounts for review.
   </Step>
   <Step title="User signs and the app submits">
     After the user signs, the app broadcasts the transaction to the configured RPC.
@@ -77,30 +76,13 @@ devnet SOL to place bets and pay transaction fees.
 | --- | --- | --- |
 | Connect | Privy wallet-connect prompt | Nothing |
 | Sign-in | `Microsets:wallet-auth:` message | One off-chain message (no fund movement) |
-| Bet | Market + outcome + stake | One on-chain transaction (`place_bet`) |
+| Prediction | Market + outcome + stake | One on-chain transaction (`place_bet`) |
 | Claim | Resolved market + payout | One on-chain transaction (`claim`) |
 
 ## Expected result after signing
 
-After a bet, the user's SOL moves into the market vault and their stake on the
+After a prediction, the user's SOL moves into the market vault and their stake on the
 chosen outcome is recorded. After `claim` on a resolved market, the winner's
 proportional share of the pool (minus the protocol fee) is transferred from the
 vault to their wallet; a voided market refunds the full stake. No additional or
 background transactions are triggered.
-
-## Evidence placeholders
-
-<CardGroup cols={2}>
-  <Card title="Connect prompt" icon="image">
-    [TODO: Attach screenshot of the Privy Solana connect prompt]
-  </Card>
-  <Card title="Sign-in message" icon="image">
-    [TODO: Attach screenshot of the `Microsets:wallet-auth:` message prompt]
-  </Card>
-  <Card title="Transaction prompt" icon="image">
-    [TODO: Attach screenshot of the wallet transaction approval]
-  </Card>
-  <Card title="Result" icon="image">
-    [TODO: Attach screenshot of a confirmed trade/claim + explorer link]
-  </Card>
-</CardGroup>

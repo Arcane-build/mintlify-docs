@@ -5,9 +5,8 @@ description: "Every signature and authorization Microset requests from a connect
 
 <Info>
   This page enumerates all wallet interactions. Microset is Solana-only, so the
-  relevant concepts are message signing, transaction signing, and SPL token
-  movement — not EVM approvals. Rows marked `[TODO]` should be confirmed against
-  the production frontend before submission.
+  relevant concepts are message signing, transaction signing, and SOL movement —
+  not EVM token approvals.
 </Info>
 
 ## Permissions requested
@@ -16,9 +15,9 @@ description: "Every signature and authorization Microset requests from a connect
 | --- | --- | --- |
 | Connect wallet (read public key) | ✅ Yes | Via Privy, Solana-only; external wallets |
 | Sign-in message (`signMessage`) | ✅ Yes | Human-readable, prefixed `Microsets:wallet-auth:`; off-chain; authorizes a backend JWT only |
-| Sign transaction (`signTransaction` / `sendTransaction`) | ✅ Yes | Only on explicit user action (place bet, claim, manage quick-bet session) |
+| Sign transaction (`signTransaction` / `sendTransaction`) | ✅ Yes | Only on explicit user action (place a prediction, claim, manage quick-prediction session) |
 | Embedded wallet creation | ❌ No | Disabled (`createOnLogin: 'off'`) |
-| Privy auto-approve / blind signing | ❌ No | Not used. Repeated bets use an explicit, user-funded quick-bet session instead (see below) |
+| Privy auto-approve / blind signing | ❌ No | Not used. Repeated predictions use an explicit, user-funded quick-prediction session instead (see below) |
 
 ## Signature types
 
@@ -29,10 +28,10 @@ description: "Every signature and authorization Microset requests from a connect
     grants no on-chain authority and moves no funds.
   </Accordion>
   <Accordion title="Transaction signing (on-chain)">
-    Used for `place_bet`, `claim`, and quick-bet session management. Each is a
+    Used for `place_bet`, `claim`, and quick-prediction session management. Each is a
     standard Solana transaction the user reviews in their wallet.
   </Accordion>
-  <Accordion title="Quick-bet delegate session">
+  <Accordion title="Quick-prediction delegate session">
     Optional. The user signs once to create an on-chain delegate session
     (`create_delegate_session`), funding an escrow with a **spend cap**
     (`max_lamports`) and an expiry (`expires_at`). A local delegate key then signs
@@ -56,7 +55,7 @@ description: "Every signature and authorization Microset requests from a connect
 | --- | --- | --- |
 | SPL `Approve` (token delegate) | ❌ No | Microset stakes are native SOL; no SPL token delegate is granted |
 | Direct transfer via signed instruction | ✅ Yes | SOL moves into the market vault on `place_bet`, and out on `claim`, only via signed instructions |
-| Quick-bet escrow (delegate session) | ✅ Optional | A user-funded, capped, revocable on-chain escrow — see above |
+| Quick-prediction escrow (delegate session) | ✅ Optional | A user-funded, capped, revocable on-chain escrow — see above |
 
 ## Program mechanics (Solana equivalents)
 
@@ -69,6 +68,6 @@ description: "Every signature and authorization Microset requests from a connect
 ## Summary
 
 Microset requests a wallet connection, one human-readable sign-in message, and
-explicit transaction signatures for each bet or claim. Stakes are native SOL that
-move only through documented instructions, the optional quick-bet delegate is
+explicit transaction signatures for each prediction or claim. Stakes are native SOL that
+move only through documented instructions, the optional quick-prediction delegate is
 bounded by a user-set cap and is revocable, and no SPL token delegate is granted.

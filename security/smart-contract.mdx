@@ -1,6 +1,6 @@
 ---
 title: "How Markets Work"
-description: "How Microset's on-chain prediction markets handle your bets, payouts, and refunds."
+description: "How Microset's on-chain prediction markets handle your predictions, payouts, and refunds."
 ---
 
 <Info>
@@ -13,8 +13,8 @@ description: "How Microset's on-chain prediction markets handle your bets, payou
 ## The basics
 
 A market is a question with two or more possible outcomes — for example, "How many
-runs on the next ball?" You place a bet on the outcome you think will happen. All
-bets for a market go into a single on-chain vault. When the result is known, the
+runs on the next ball?" You make a prediction on the outcome you think will happen. All
+predictions for a market go into a single on-chain vault. When the result is known, the
 market is resolved to one winning outcome, and the pool is split among the people
 who picked it.
 
@@ -38,7 +38,7 @@ Everyone's stake — across all six options — sits in one vault. Say the ball 
 bowled and the result is **4**. The market resolves to that outcome, and:
 
 - A small **protocol fee** is taken from the total pool.
-- Everyone who bet on **4** splits the rest of the pool, in proportion to how much they staked.
+- Everyone who predicted **4** splits the rest of the pool, in proportion to how much they staked.
 - The other five outcomes win nothing — their stakes flow to the winners.
 
 So if you staked more on the winning outcome, you get a bigger share of the pool.
@@ -65,9 +65,9 @@ So if you staked more on the winning outcome, you get a bigger share of the pool
 ## What you can do
 
 <Steps>
-  <Step title="Place a bet">
+  <Step title="Make a prediction">
     Choose a market and an outcome, enter an amount, and sign the transaction. Your
-    stake moves into the market's vault. You can bet until the market's close time.
+    stake moves into the market's vault. You can predict until the market's close time.
   </Step>
   <Step title="Wait for resolution">
     After the event, the market is resolved to the winning outcome. A protocol fee
@@ -82,11 +82,11 @@ So if you staked more on the winning outcome, you get a bigger share of the pool
   </Step>
 </Steps>
 
-### Quick bets (optional)
+### Quick predictions (optional)
 
-To place several bets without approving each one in your wallet, you can create a
-**quick-bet session**: you sign once to fund a small on-chain escrow with a spend
-limit you choose. Bets are then placed from that escrow up to the limit. You stay
+To make several predictions without approving each one in your wallet, you can create a
+**quick-prediction session**: you sign once to fund a small on-chain escrow with a spend
+limit you choose. Predictions are then placed from that escrow up to the limit. You stay
 in control — the session has a cap, and you can withdraw unused funds or revoke it
 at any time.
 
@@ -98,7 +98,7 @@ The program enforces these rules on-chain, so they can't be bypassed:
 | --- | --- |
 | Only winners can claim | If you didn't pick the winning outcome, the claim is rejected — no one can drain the pool. |
 | No double claims | Once you've claimed a market, you can't claim it again. |
-| No betting after resolution | A market can't be resolved and still take new bets — the result is locked. |
+| No predictions after resolution | A market can't be resolved and still take new predictions — the result is locked. |
 | Single resolution | A market is resolved exactly once; outcomes can't be flipped afterward. |
 | Capped fees | The protocol fee has a hard upper limit enforced in code. |
 | Full refunds on void | A voided market returns every stake in full, with no fee. |
@@ -111,6 +111,6 @@ Voided markets are refunded in full with **no** fee.
 
 ## Good to know
 
-- Solana transactions are final once confirmed — bets and claims can't be reversed.
-- Outcomes are resolved by a designated resolution authority once the real-world result is known.
+- Solana transactions are final once confirmed — predictions and claims can't be reversed.
+- Outcomes are not set by Microset — resolution is triggered by third-party sports data APIs (e.g. Roanuz) once the real-world result is known.
 - Microset is sport-agnostic: the same market mechanics work for cricket, football, basketball, and more.

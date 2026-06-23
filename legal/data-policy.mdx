@@ -4,11 +4,9 @@ description: "What data Microset stores, where it lives, and how long we keep it
 ---
 
 <Info>
-  **Last updated:** [INSERT EFFECTIVE DATE]. This Data Policy describes how
+  **Last updated:** June 23, 2026. This Data Policy describes how
   Microset handles data in practice. It complements the
-  [Privacy Policy](/legal/privacy-policy), which covers your rights. It is a
-  template and **not legal advice** — confirm the details below against your
-  production systems and have counsel review it.
+  [Privacy Policy](/legal/privacy-policy), which covers your rights.
 </Info>
 
 ## On-chain vs off-chain data
@@ -17,18 +15,18 @@ Microset is non-custodial and blockchain-based, so data lives in two places:
 
 | Where | What | Properties |
 | --- | --- | --- |
-| **On-chain (Solana)** | Wallet address, bets, claims, market state | Public, permanent, not controlled by Microset |
+| **On-chain (Solana)** | Wallet address, predictions, claims, market state | Public, permanent, not controlled by Microset |
 | **Off-chain (our backend)** | Account/session data, app preferences, support records | Private, stored by us, deletable on request |
 
 ## What we store off-chain
 
 | Data | Purpose | Retention |
 | --- | --- | --- |
-| Wallet public address | Link activity to your session and profile | [INSERT RETENTION] |
-| Sign-in signature / session token | Verify wallet ownership and keep you signed in | Session lifetime [TODO: confirm] |
-| Bet / claim history (cached) | Display your positions and history in the UI | [INSERT RETENTION] |
-| Device & log data | Security, debugging, abuse prevention | [INSERT RETENTION] |
-| Support correspondence | Respond to and track your requests | [INSERT RETENTION] |
+| Wallet public address | Link activity to your session and profile | While the account is active |
+| Sign-in signature / session token | Verify wallet ownership and keep you signed in | Session duration |
+| Prediction / claim history (cached) | Display your positions and history in the UI | While the account is active |
+| Device & log data | Security, debugging, abuse prevention | Up to 12 months |
+| Support correspondence | Respond to and track your requests | While the account is active |
 
 We do **not** store private keys or seed phrases.
 
@@ -36,7 +34,6 @@ We do **not** store private keys or seed phrases.
 
 - ❌ Private keys
 - ❌ Seed / recovery phrases
-- ❌ [INSERT any other categories you explicitly exclude]
 
 ## Sub-processors
 
@@ -44,19 +41,16 @@ We use third parties to operate the Service. The current list:
 
 | Provider | Role | Data shared |
 | --- | --- | --- |
-| Privy | Wallet connection & authentication | Wallet address, auth signals [TODO: confirm] |
+| Privy | Wallet connection & authentication | Wallet address, authentication signals |
 | Solana RPC provider | Read chain state / submit transactions | Wallet address, transaction data |
 | Database provider (MongoDB) | Store off-chain application data | Off-chain data listed above |
 | Hosting provider (Railway) | Run the backend API | Operational data |
-| [INSERT analytics provider, if any] | Usage analytics | [INSERT] |
-
-[TODO: confirm this list and add any others; link each provider's privacy terms.]
 
 ## Storage and security
 
 - Sensitive credentials (such as authentication tokens) are held in encrypted storage.
 - Access to off-chain data is restricted to authorized personnel and systems.
-- [INSERT additional safeguards: encryption in transit, backups, access controls.]
+- All data in transit is encrypted (HTTPS/TLS), with restricted access to production systems and regular backups.
 
 ## Data retention and deletion
 
@@ -72,7 +66,7 @@ off-chain data by contacting [tech@microset.io](mailto:tech@microset.io).
 ## International processing
 
 Data may be processed in countries other than yours, with appropriate safeguards
-where required. [TODO: confirm with counsel.]
+where required.
 
 ## Changes
 

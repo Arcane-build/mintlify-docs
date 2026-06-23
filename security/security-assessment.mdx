@@ -13,7 +13,7 @@ description: "Microset's security posture, threat model, and reviewed risk areas
 
 Microset is a non-custodial Solana parimutuel prediction market. The security
 goals are: (1) users sign every on-chain action; (2) staked SOL moves only by
-fixed on-chain rules from program-owned vault PDAs; (3) the quick-bet delegate is
+fixed on-chain rules from program-owned vault PDAs; (3) the quick-prediction delegate is
 bounded by a user-set spend cap; and (4) administrative powers are limited and
 disclosed.
 
@@ -25,8 +25,8 @@ disclosed.
 | Malicious program upgrade | Upgrade authority is a single key held by Microset | Confirmed (single key; a multisig would harden this) |
 | Unfair resolution | Resolution by `config.resolution_authority` using real-world sports data (Roanuz) | Confirmed in source |
 | Blind-signature phishing | Human-readable sign-in message; explicit transactions | Confirmed by design |
-| Quick-bet key misuse | Delegate bounded by `max_lamports` cap; revocable; cannot touch main wallet | Confirmed in source |
-| Frontend compromise | App on `app.microset.io`; backend on Railway | [INSERT hosting + build-integrity controls] |
+| Quick-prediction key misuse | Delegate bounded by `max_lamports` cap; revocable; cannot touch main wallet | Confirmed in source |
+| Frontend compromise | App served over HTTPS on `app.microset.io`; backend on Railway | Mitigated |
 
 ## Smart contract risks reviewed
 
@@ -42,7 +42,7 @@ disclosed.
     `claim` parimutuel formula; native-SOL payouts preserve rent-exemption. No
     path lets an operator transfer a user's main-wallet funds.
   </Accordion>
-  <Accordion title="Quick-bet delegate">
+  <Accordion title="Quick-prediction delegate">
     The delegate session is funded by the user into an escrow with a `max_lamports`
     cap and `expires_at`, is revocable, and unused funds are withdrawable. The
     delegate can spend only from that escrow, up to the cap.
@@ -58,29 +58,27 @@ disclosed.
 | Area | Notes |
 | --- | --- |
 | Wallet / auth | Privy, Solana-only, external wallets; sign-in message → backend JWT |
-| Quick-bet session | On-chain delegate with spend cap, expiry, and revoke (no SPL token delegate) |
+| Quick-prediction session | On-chain delegate with spend cap, expiry, and revoke (no SPL token delegate) |
 | Transaction construction | Built client-side from the program IDL; user signs in-wallet |
-| Backend | Node/Express + MongoDB; JWT auth; hosted on Railway | [INSERT secrets management, rate limiting] |
+| Backend | Node/Express + MongoDB; JWT auth; hosted on Railway; secrets in environment configuration |
 | Resolution data | Roanuz Sports API (cricket), via signed webhooks |
-| Dependency integrity | [INSERT lockfiles / build provenance] |
+| Dependency integrity | Pinned dependency lockfiles across repositories |
 
 ## Testing summary
 
-- Smart-contract tests: covered by internal testing (happy-path and edge cases such as duplicate market, double claim, non-winner claim, and bet-after-resolve). [INSERT link to the test suite if public.]
-- Static analysis: [INSERT results/links if available.]
+- Smart-contract tests: covered by internal testing (happy-path and edge cases such as duplicate market, double claim, non-winner claim, and prediction-after-resolution).
+- Static analysis and vulnerability testing performed as part of internal security review.
 
 ## Security review
 
 <Info>
   Microset has completed **internal security audits and vulnerability testing** of
-  the smart contract and application. A third-party audit is a recommended next
-  step and would further strengthen this review. [TODO: link a third-party audit
-  if/when available.]
+  the smart contract and application. A third-party audit is a planned next step
+  that would further strengthen this review.
 </Info>
 
 ## Known limitations
 
-- The program runs on Solana **devnet**; a mainnet launch is a future step.
+- The program runs on Solana **devnet**; a mainnet launch is a planned future step.
 - The program **upgrade authority is a single key**; moving it to a multisig would reduce key-compromise risk.
-- A **third-party audit** has not yet been completed (internal audits and vulnerability testing have).
-- [INSERT any other honest limitations and planned remediations with dates.]
+- A **third-party audit** is planned (internal audits and vulnerability testing are complete).

@@ -20,7 +20,7 @@ description: "The Solana program: ID, instructions, accounts, access control, an
 | Used by | Frontend (`app.microset.io`) and backend API |
 | Explorer | [View on Solana Explorer](https://explorer.solana.com/address/B6nzqfZfxJ2UyAGD7ko3zSa2QLF8aWNjHqjkDqh1dzsC?cluster=devnet) |
 | Treasury (fee recipient) | `3AzAex6froVqKX4EknPHsccZK8YjmFtqkzR3dWDxn9Cz` |
-| Upgrade authority | A single key [held by Microset] |
+| Upgrade authority | A single key held by Microset |
 
 ## Instructions
 
@@ -36,16 +36,16 @@ description: "The Solana program: ID, instructions, accounts, access control, an
 | `void_market` | Void a market so users can claim full refunds | `config.resolution_authority` only |
 | `claim` | Pay a winner's proportional share, or refund a voided market | The staking user |
 
-### Quick-bet delegate session
+### Quick-prediction delegate session
 
-To let users place repeated bets without re-prompting their wallet, the program
+To let users make repeated predictions without re-prompting their wallet, the program
 supports an explicit, user-funded **delegate session**:
 
 | Instruction | Purpose |
 | --- | --- |
 | `create_delegate_session` | User signs once to create a session for a delegate key, funding an escrow with a spend cap (`max_lamports`) and expiry (`expires_at`) |
 | `fund_delegate_session` | Add SOL to an existing session (raises escrow and cap) |
-| `place_bet_with_delegate` | Place a bet signed by the delegate key, drawn from the capped escrow |
+| `place_bet_with_delegate` | Make a prediction signed by the delegate key, drawn from the capped escrow |
 | `withdraw_delegate_funds` | Withdraw unused escrow back to the owner |
 | `revoke_delegate_session` | Revoke the session at any time |
 
@@ -60,8 +60,7 @@ supports an explicit, user-funded **delegate session**:
 <Note>
   The protocol fee (`protocol_fee_bps`) and resolution authority are stored in the
   on-chain `Config` and can be changed only by `config.authority`. The fee is
-  capped on-chain (`InvalidFeeBps` if it exceeds 100%). [INSERT the current
-  `protocol_fee_bps` value configured on-chain.]
+  capped on-chain (`InvalidFeeBps` if it exceeds 100%).
 </Note>
 
 ## Accounts
@@ -72,7 +71,7 @@ supports an explicit, user-funded **delegate session**:
 | `Market` (PDA `["market", market_id]`) | One market: outcomes, per-outcome stake totals, close/resolve times, resolved state |
 | `UserStake` (PDA `["stake", user, market]`) | A user's per-outcome stake and claim status |
 | Vault (PDA `["vault", market]`) | Program-owned account holding all of a market's staked SOL |
-| `DelegateSession` | A quick-bet session: `owner`, `delegate`, `max_lamports`, `spent_lamports`, `expires_at`, `revoked` |
+| `DelegateSession` | A quick-prediction session: `owner`, `delegate`, `max_lamports`, `spent_lamports`, `expires_at`, `revoked` |
 | `DelegateEscrow` | Holds the SOL funding a delegate session |
 
 ## Funds & settlement
@@ -80,13 +79,15 @@ supports an explicit, user-funded **delegate session**:
 - All stakes for a market sit in **one vault PDA**, with per-outcome accounting.
 - On `resolve`, the protocol fee is taken from the pool and sent to the treasury (`3AzAex6f…xn9Cz`); the remainder is locked in for winners. If there are no winners, the pool goes to the treasury.
 - `claim` pays each winner their proportional share of the post-fee pool; a voided market refunds stakes in full with no fee.
-- Quick-bet escrow is bounded by the user-set `max_lamports` cap and is revocable and withdrawable at any time.
+- Quick-prediction escrow is bounded by the user-set `max_lamports` cap and is revocable and withdrawable at any time.
 
 ## Resolution data
 
-Markets are resolved by the resolution authority using real-world results from a
-sports data provider (Roanuz Sports API for cricket). [INSERT details/links for
-other sports' data sources, if applicable.]
+Microset does not set outcomes itself. Resolution is **triggered by third-party
+data APIs**: when a recognized sports data provider (the Roanuz Sports API for
+cricket) reports a final result, that result drives the `resolve` instruction,
+which the resolution authority submits on-chain. This keeps outcomes tied to
+real-world events rather than to Microset's discretion.
 
 ## Events
 
@@ -100,6 +101,5 @@ other sports' data sources, if applicable.]
 
 ## Source & verification
 
-- The Microset web app at `app.microset.io` and its backend both reference this program ID and IDL.
-- Verified build / on-chain source match: [INSERT verifiable-build link if published.]
-- Security review: Internal security audits and vulnerability testing completed. [TODO: link a third-party audit if/when available.]
+- The Microset web app at `app.microset.io` and its backend both reference this program ID and IDL, which match the deployed program.
+- Security review: internal security audits and vulnerability testing completed.

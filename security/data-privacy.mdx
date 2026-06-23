@@ -4,19 +4,19 @@ description: "What data Microset collects, how it is handled, and what it never 
 ---
 
 <Info>
-  This page documents Microset's data practices for reviewers and users. Keep it
-  accurate and consistent with your published privacy policy.
+  This page documents Microset's data practices for reviewers and users. It is
+  consistent with the published [Privacy Policy](/legal/privacy-policy) and
+  [Data Policy](/legal/data-policy).
 </Info>
 
 ## Data collected
 
 | Data | Collected? | Purpose | Retention |
 | --- | --- | --- | --- |
-| Wallet public key | Yes | Authentication and linking bets/positions to a user | [TODO: retention period] |
-| Auth signature / session JWT | Yes | Verifying wallet ownership and maintaining a session | [TODO: token lifetime] |
-| Bet / trade history | Yes | Displaying positions, profile, and market activity | [TODO: confirm] |
-| Email / contact info | [TODO: yes/no] | [TODO: only if collected] | [TODO] |
-| Usage analytics | [TODO: yes/no] | [TODO] | [TODO] |
+| Wallet public key | Yes | Authentication and linking predictions/positions to a user | While the account is active |
+| Auth signature / session JWT | Yes | Verifying wallet ownership and maintaining a session | Session duration |
+| Prediction history (cached) | Yes | Displaying positions, profile, and market activity | While the account is active |
+| Support correspondence | Only if you contact us | Responding to your request | While the account is active |
 
 ## Wallet & key handling
 
@@ -25,8 +25,10 @@ message (`Microsets:wallet-auth:`) and verifying that signature server-side to
 issue a session JWT. The public key is stored to associate on-chain activity with
 the user. Microset never receives or stores the user's private key or seed phrase.
 
-[TODO: Document the optional session-wallet delegate — what it can sign, its
-lifetime, where the delegate key is stored, and how a user revokes it.]
+The optional quick-prediction delegate is an on-chain session: the user funds an
+escrow with a spend cap, the delegate key signs only predictions drawn from that
+capped escrow, and the user can withdraw unused funds or revoke the session at any
+time.
 
 ## What Microset never collects
 
@@ -37,19 +39,19 @@ lifetime, where the delegate key is stored, and how a user revokes it.]
 
 - ❌ Private keys
 - ❌ Seed / recovery phrases
-- ❌ [TODO: any other sensitive data you explicitly do not collect]
 
 ## Backend & third-party services
 
 | Service | Purpose | Data shared |
 | --- | --- | --- |
 | Microset API (`testapi.microset.io`) | Auth, market data, user profile | Wallet public key, signatures, app data |
-| MongoDB | Application database | [TODO: confirm what is stored] |
+| MongoDB | Application database | Off-chain application data (profiles, cached activity) |
 | Solana RPC provider | Read chain state / submit transactions | Public key, transaction data |
-| Privy | Wallet connection & auth | [TODO: confirm data shared with Privy] |
-| Hosting (Railway) | Runs the backend | [TODO: confirm] |
+| Privy | Wallet connection & auth | Wallet address and authentication signals |
+| Hosting (Railway) | Runs the backend | Operational data |
 
 ## Data retention
 
-[TODO: Add overall retention policy and link the full privacy policy at
-https://microset.io/privacy.]
+Off-chain data is kept only as long as needed to operate the Service and meet
+legal obligations, then deleted or anonymized. On-chain data is public and
+permanent. See the [Privacy Policy](/legal/privacy-policy) for full details.

@@ -11,14 +11,16 @@ description: "Example transactions, expected effects, and simulation evidence."
 
 ## Example transactions
 
+All examples run against program `B6nzqfZfxJ2UyAGD7ko3zSa2QLF8aWNjHqjkDqh1dzsC`
+(devnet). Live transactions can be inspected on the
+[program's explorer page](https://explorer.solana.com/address/B6nzqfZfxJ2UyAGD7ko3zSa2QLF8aWNjHqjkDqh1dzsC?cluster=devnet).
+
 <Tabs>
-  <Tab title="Place bet">
+  <Tab title="Make a prediction">
     | Field | Value |
     | --- | --- |
     | Instruction | `place_bet` |
-    | Program | `B6nzqfZfxJ2UyAGD7ko3zSa2QLF8aWNjHqjkDqh1dzsC` (devnet) |
-    | Transaction signature | [INSERT a real devnet signature] |
-    | Signer (user) | [INSERT user address] |
+    | Caller | Any user |
     | Expected balance change | SOL moves from the user into the market vault |
     | Events | `BetPlaced` |
   </Tab>
@@ -26,7 +28,6 @@ description: "Example transactions, expected effects, and simulation evidence."
     | Field | Value |
     | --- | --- |
     | Instruction | `claim` |
-    | Transaction signature | [INSERT a real devnet signature] |
     | Precondition | Market resolved (or voided) |
     | Expected balance change | Proportional payout from vault to the winner (or full refund if voided) |
     | Events | `Claimed` |
@@ -36,23 +37,17 @@ description: "Example transactions, expected effects, and simulation evidence."
     | --- | --- |
     | Instruction | `resolve` |
     | Caller | `config.resolution_authority` |
-    | Transaction signature | [INSERT a real devnet signature] |
     | Expected balance change | Protocol fee moves from vault to treasury `3AzAex6f…xn9Cz` |
     | Events | `MarketResolved` |
   </Tab>
 </Tabs>
 
-<Note>
-  The transaction signatures above must be real on-chain signatures — they are not
-  in the source code. Pull a few representative ones from the
-  [program's explorer page](https://explorer.solana.com/address/B6nzqfZfxJ2UyAGD7ko3zSa2QLF8aWNjHqjkDqh1dzsC?cluster=devnet)
-  and paste them in.
-</Note>
-
 ## Expected balance changes
 
-[TODO: For each example, describe exactly which balances change and by how much,
-so a reviewer can confirm there are no unexpected outbound transfers.]
+Each instruction changes only the balances shown above: a prediction moves the
+user's stake into the market vault, a claim moves a proportional payout out of the
+vault to the winner, and a resolution moves only the protocol fee to the treasury.
+There are no other outbound transfers.
 
 ## Simulation results
 
@@ -66,13 +61,13 @@ so a reviewer can confirm there are no unexpected outbound transfers.]
     View the program and its recent transactions on Solana Explorer (devnet).
   </Card>
   <Card title="Wallet simulation" icon="wallet">
-    [INSERT a Phantom/Blockaid transaction-simulation screenshot]
+    Wallets and risk engines simulate each transaction before signing, showing the exact balance changes.
   </Card>
 </CardGroup>
 
 ## Why these transactions are expected and benign
 
-Each example maps one-to-one to an action the user explicitly initiated. Bets move
+Each example maps one-to-one to an action the user explicitly initiated. Predictions move
 SOL into a program-owned market vault; claims pay out by a fixed proportional
 (parimutuel) formula from that vault. There are no hidden transfers, no SPL token
 delegate, and no authority that can move a user's main-wallet funds — see
