@@ -18,23 +18,6 @@ winnings — requires a transaction the user explicitly signs. Market reserves a
 held in program-controlled vault PDAs and paid out only according to on-chain
 rules.
 
-## About the flagged address
-
-<Warning>
-  The flagged address `0x35cABAF63325a71cEC0b2C47e197e52D3735187a` is an
-  **Ethereum-format** address (`0x` + 40 hex characters). Microset is a
-  **Solana-only** project: its program ID is a base58 Solana address, it uses SPL
-  tokens, and it connects exclusively to Solana wallets via Privy. The flagged
-  Ethereum address does not appear anywhere in the Microset codebase.
-
-  We therefore ask the reviewer to confirm what this address refers to. If the
-  flag is keyed to the Microset domain/dApp, this documentation describes the
-  actual Solana program and its behavior. If the Ethereum address itself is the
-  basis for the flag, it is not a Microset contract, and we would appreciate
-  clarification so we can respond accurately. [TODO: Confirm with Blockaid exactly
-  what the address represents in their system.]
-</Warning>
-
 ## Why Microset is safe to use
 
 <AccordionGroup>
@@ -74,7 +57,6 @@ rules.
 - [ ] No hidden transfers — **Confirmed: funds move only through documented instructions**
 - [ ] No blind/deceptive signatures — **Confirmed by design**
 - [ ] All actions user-initiated and user-signed — **Confirmed by design**
-- [ ] Flagged Ethereum address not present in code — **Confirmed (Solana-only)**
 
 ## Contact details
 

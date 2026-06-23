@@ -36,8 +36,7 @@ by on-chain rules, not by an operator who can freely move user funds.
     winnings.
   </Card>
   <Card title="Reviewers" icon="shield-check">
-    Blockaid, Phantom, and other wallet/risk teams evaluating the dApp and the
-    address under review.
+    Blockaid, Phantom, and other wallet/risk teams evaluating the dApp.
   </Card>
 </CardGroup>
 
@@ -61,17 +60,11 @@ by on-chain rules, not by an operator who can freely move user funds.
 | Default cluster (repo config) | `devnet` (no mainnet entry defined in `Anchor.toml`) |
 
 <Warning>
-  **Two issues to resolve before submitting this to a reviewer.**
-
-  1. The program ID in the contracts repository
+  The program ID in the contracts repository
   (`EcncSdXCTy2RnpnZPXa1VPij1tjbS6wSjrwM47vFEN9e`) does **not** match the program
   ID the frontend loads (`B6nzqfZfxJ2UyAGD7ko3zSa2QLF8aWNjHqjkDqh1dzsC`). Confirm
   which program ID is actually deployed in production and make the docs and code
-  consistent.
-
-  2. The flagged address — `0x35cABAF63325a71cEC0b2C47e197e52D3735187a` — is an
-  **Ethereum-format** address. It does not appear anywhere in the Microset
-  codebase, which is Solana-only. See [Review Summary](/security/review-summary).
+  consistent before publishing.
 </Warning>
 
 ## Official links
