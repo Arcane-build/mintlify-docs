@@ -68,6 +68,20 @@
             ]
           }
         ]
+      },
+      {
+        "tab": "Legal",
+        "groups": [
+          {
+            "group": "Policies",
+            "icon": "gavel",
+            "pages": [
+              "legal/terms-and-conditions",
+              "legal/privacy-policy",
+              "legal/data-policy"
+            ]
+          }
+        ]
       }
     ]
   },
