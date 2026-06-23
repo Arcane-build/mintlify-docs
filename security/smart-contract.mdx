@@ -1,0 +1,281 @@
+---
+title: "Smart Contract"
+description: "The Microset prediction-market Solana program: design, accounts, instructions, events, and deployment."
+---
+
+<Info>
+  This page documents the Microset prediction-market smart contract — a
+  sport-agnostic, parimutuel, multi-outcome market on Solana. It is the
+  authoritative contract specification.
+</Info>
+
+<Warning>
+  **Program ID to reconcile.** This specification uses program ID
+  `JDix1JioMVJCFSxdRwZLnmD1jGxwArXhi4kpNFEA8VTB` (devnet). Other parts of the
+  codebase reference different program IDs
+  (`EcncSdXCTy2RnpnZPXa1VPij1tjbS6wSjrwM47vFEN9e` in the contracts repo and
+  `B6nzqfZfxJ2UyAGD7ko3zSa2QLF8aWNjHqjkDqh1dzsC` in the frontend). Confirm the
+  single production program ID and align all references before publishing.
+</Warning>
+
+## Core design
+
+### Market identity
+
+Each market has a unique **`market_id`**: a **32-byte external ID** provided by the
+backend (for example, a hash of a provider event key, a UUID, or any opaque 32
+bytes). The program **does not** derive or validate its contents; it uses
+`market_id` only as the PDA seed. This keeps the contract **sport-agnostic**
+(cricket, football, basketball, and so on).
+
+### Multi-outcome markets (2 to N outcomes)
+
+A market can have **2 up to `MAX_OUTCOMES`** (e.g. 7) outcomes — not only binary.
+Each outcome index has a **logical pool** of stakes; all stakes sit in **one
+vault** per market, with accounting via `total_stake_per_outcome[0..outcome_count-1]`
+and per-user `stake_per_outcome`. At resolution, **one** outcome wins; only users
+who staked on that outcome share the pool (after the protocol fee), proportionally.
+
+**Example — "Runs on Next Ball" (6 outcomes):**
+
+| Outcome index | Label / pool | Stakes held (logically) |
+| --- | --- | --- |
+| 0 | Dot ball | All bets on "0 runs" |
+| 1 | 1 run | All bets on "1 run" |
+| 2 | 2 runs | All bets on "2 runs" |
+| 3 | 3 runs | All bets on "3 runs" |
+| 4 | 4 / boundary | All bets on "4 or boundary" |
+| 5 | 6 | All bets on "six" |
+
+- **One vault** holds the combined SOL from all 6 pools.
+- **Ball is bowled → result is "4"** → the oracle calls `resolve(4)`. Outcome index 4 wins.
+- The protocol fee is taken from the total pool; **winners** (everyone who staked on outcome 4) share the remaining pool proportionally. Losers (outcomes 0, 1, 2, 3, 5) get nothing; their stakes effectively go to the winners' pool (parimutuel).
+
+So *"4's pool wins, takes money from all other 5"* — implemented as one vault, with
+payout only to users whose `stake_per_outcome[4] > 0`.
+
+### Supported outcomes
+
+The program is outcome-agnostic; `outcome_count` (2–`MAX_OUTCOMES`) defines the set
+(e.g. 6 outcomes for "Runs on Next Ball", 2 for Yes/No). Stakes are tracked per
+outcome index; at resolution, exactly one outcome wins.
+
+### Escrow and payouts
+
+- Each market has **one vault PDA** that holds **all** staked SOL (for every outcome). There are no separate escrow accounts per outcome — a single vault with per-outcome accounting.
+- `place_bet(outcome_index, amount)` transfers SOL from the user into this vault and updates `total_stake_per_outcome[outcome_index]` and the user's `stake_per_outcome[outcome_index]`.
+- On `resolve(winning_outcome_index)`, the program:
+  - Calculates the **protocol fee** (basis points from global config) on the total pool.
+  - Locks in a **resolved pool after fee**.
+  - Only users who staked on the winning outcome can claim; `claim()` pays each such winner their share of the pool, proportional to their stake on the winning outcome (parimutuel).
+
+## Accounts
+
+<AccordionGroup>
+  <Accordion title="Config — PDA: [&quot;config&quot;]">
+    Global, singleton configuration for the program.
+
+    - `authority: Pubkey` — admin that can change config.
+    - `treasury: Pubkey` — protocol fee recipient.
+    - `protocol_fee_bps: u16` — fee in basis points (capped in code).
+    - `resolution_authority: Pubkey` — address allowed to resolve markets.
+    - `paused: bool` — if true, betting is disabled.
+    - `initialized: bool` — safety flag to prevent re-init.
+  </Accordion>
+  <Accordion title="Market — PDA: [&quot;market&quot;, market_id]">
+    A single prediction market with **2 to `MAX_OUTCOMES`** outcomes (any sport).
+
+    - `market_id: [u8; 32]` — external ID (provided by backend; used only as PDA seed).
+    - `name: [u8; MAX_MARKET_NAME_LEN]` + `name_len: u8`
+    - `outcome_count: u8` — number of outcomes (2–`MAX_OUTCOMES`).
+    - `close_time: i64` — betting closes at this Unix timestamp.
+    - `resolve_deadline: i64` — market must be resolved by this Unix timestamp.
+    - `voided: bool` — if true, users claim a full refund (no fees) via `claim()`.
+    - `vault: Pubkey` — single PDA holding all escrow lamports (all outcome pools combined).
+    - `total_stake_per_outcome: [u64; MAX_OUTCOMES]` — total lamports staked per outcome index.
+    - `total_stake: u64` — sum of all stakes across outcomes.
+    - `resolved_outcome: Option<u8>`, `resolved_pool_after_fee: Option<u64>`, `resolved: bool`
+  </Accordion>
+  <Accordion title="UserStake — PDA: [&quot;stake&quot;, user, market]">
+    Per-user, per-market stake account.
+
+    - `user: Pubkey`
+    - `market: Pubkey`
+    - `stake_per_outcome: [u64; MAX_OUTCOMES]`
+    - `total_staked: u64`
+    - `claimed: bool` — prevents double claim.
+  </Accordion>
+  <Accordion title="Vault — PDA: [&quot;vault&quot;, market] (0-space account)">
+    Owned by the program. Only stores lamports; all accounting is done on `Market`
+    and `UserStake`.
+  </Accordion>
+</AccordionGroup>
+
+## Instructions
+
+The program module is `prediction_market` (see `src/lib.rs`).
+
+| Instruction | Description | Access control |
+| --- | --- | --- |
+| `initialize_config(treasury, protocol_fee_bps, resolution_authority)` | Creates the `Config` PDA; validates treasury and fee bounds; sets resolution authority and unpauses the protocol. | Deployer wallet (by convention), enforced via account constraints |
+| `update_config(treasury?, protocol_fee_bps?, resolution_authority?, paused?)` | Partially updates config fields when `Some`; can change treasury, fee, resolution authority, and pause state. | `config.authority` signer only |
+| `create_market(market_id, outcome_count, name, name_len, close_time, resolve_deadline)` | Seeds the `Market` PDA `["market", market_id]` and `Vault` PDA `["vault", market]`; requires `close_time > now` and `resolve_deadline > close_time`; emits `CreateMarket`. | Open to any payer; uniqueness by `market_id` |
+| `place_bet(outcome_index, amount)` | Validates not paused / not resolved / valid outcome / amount in range; transfers SOL to vault; updates user and market stakes; emits `BetPlaced`. | Any user |
+| `resolve(outcome_index)` | Resolution authority only; computes fee and pool-after-fee; transfers fee to treasury; records resolved state; emits `MarketResolved`. | `config.resolution_authority` |
+| `void_market()` | Marks the market voided; users then claim a full refund via `claim()`. | Resolution authority only |
+| `claim()` | Voided: refunds `total_staked` in full (no fees). Resolved: pays the winner's proportional share and sets `claimed`; emits `Claimed`. | The staking user |
+
+### Fee and payout math
+
+```text
+# resolve()
+fee_amount    = total_stake * protocol_fee_bps / 10_000
+pool_after_fee = total_stake - fee_amount
+
+# claim() — for winning outcome w
+Lw    = market.total_stake_per_outcome[w]
+user  = user_stake.stake_per_outcome[w]
+share = pool_after_fee * user / Lw
+```
+
+## Events & errors
+
+| Event | Payload |
+| --- | --- |
+| `CreateMarket` | market_id, outcome_count |
+| `BetPlaced` | user, market, outcome, amount |
+| `MarketResolved` | market, winning outcome, fee amount, pool after fee |
+| `Claimed` | user, market, payout amount |
+| `MarketVoided` | market (invalid/unplayed) |
+
+**Key errors** (`src/error.rs`): `MarketVoided` / `MarketAlreadyVoided`,
+`MarketAlreadyResolved`, `MarketNotResolved`, `AlreadyClaimed`, `NotWinner`,
+`BetAmountTooLow` / `BetAmountTooHigh`, `ProtocolFeeTooHigh`, `Unauthorized`
+(for config / resolve / void calls).
+
+## Development, testing, deployment
+
+**Prerequisites:** Rust + Cargo, Solana CLI, Anchor CLI, Node.js + npm (for
+TypeScript tests).
+
+<Steps>
+  <Step title="Install dependencies">
+    ```bash
+    cd /root/sol-prediction-market/smart-contract
+    npm install
+    ```
+  </Step>
+  <Step title="Build the program">
+    ```bash
+    anchor build
+    ```
+  </Step>
+  <Step title="Run tests (TypeScript / Mocha)">
+    ```bash
+    # Deploy to devnet and run tests (use if you hit DeclaredProgramIdMismatch):
+    anchor test
+
+    # Skip deploy and only run tests (program already deployed with same id):
+    anchor test --skip-deploy
+
+    # Or run the test script directly:
+    npx ts-mocha -t 1000000 tests/*.ts
+    ```
+  </Step>
+</Steps>
+
+### Fixing `DeclaredProgramIdMismatch` (devnet)
+
+This error means the program on devnet was built with a different program ID than
+your current IDL.
+
+```bash
+# 1. Confirm the program keypair matches declare_id! in lib.rs and Anchor.toml:
+solana address -k target/deploy/prediction_market-keypair.json
+# Should print: JDix1JioMVJCFSxdRwZLnmD1jGxwArXhi4kpNFEA8VTB
+
+# 2. Build and deploy to devnet, then run tests:
+npm run deploy:devnet
+# or: anchor build && anchor deploy --provider.cluster devnet
+anchor test --skip-deploy
+```
+
+### Test coverage
+
+The main suite is in `tests/prediction_market.ts`, covering happy-path and edge
+cases.
+
+**Happy path:** config initialization (and reuse via `update_config`),
+`create_market` with an external 32-byte `market_id`, `place_bet` vault/stake
+movement, and `resolve + claim` single-winner payout.
+
+| Edge case | What is tested | Expected outcome |
+| --- | --- | --- |
+| Duplicate market | Second `create_market` with the same `market_id` | Fails (`AccountAlreadyInUse` / `MarketIdAlreadyExists`) |
+| Double claim | Winner calls `claim()` twice | Second call fails with `AlreadyClaimed` |
+| Non-winner claim | User on losing outcome calls `claim()` | Fails with `NotWinner` |
+| Bet after resolve | `place_bet` after `resolve()` | Fails with `MarketAlreadyResolved` |
+
+### Deploy to devnet
+
+- Program ID: `JDix1JioMVJCFSxdRwZLnmD1jGxwArXhi4kpNFEA8VTB`
+- Ensure `~/.config/solana/id.json` is funded on devnet and is the program's upgrade authority.
+
+```bash
+# Recommended: deploy with --max-len so the program account is large enough
+anchor build
+solana program deploy target/deploy/prediction_market.so \
+  --program-id target/deploy/prediction_market-keypair.json \
+  --url devnet \
+  --max-len 400000
+
+# Upload the IDL (optional, for the frontend)
+anchor idl init --filepath target/idl/prediction_market.json \
+  JDix1JioMVJCFSxdRwZLnmD1jGxwArXhi4kpNFEA8VTB --provider.cluster devnet
+```
+
+If you used `anchor deploy` and hit "account data too small," extend the program
+account then redeploy:
+
+```bash
+solana program extend JDix1JioMVJCFSxdRwZLnmD1jGxwArXhi4kpNFEA8VTB 200000 --url devnet
+anchor deploy --provider.cluster devnet
+```
+
+## Integration notes
+
+The frontend / backend should:
+
+- Provide a **32-byte `market_id`** per market (e.g. SHA-256 of the provider event key, or a UUID as bytes). The program does not validate or derive it; any sport can use its own ID scheme.
+- Call `create_market(market_id, outcome_count, name, name_len, close_time, resolve_deadline)` — no `match_id`, over, ball, timestamp, or nonce.
+- Track markets, positions, and resolved outcomes off-chain for the UI; use on-chain data for final balances and security.
+
+## Appendix — token-escrow / factory variant
+
+<Note>
+  A variant design uses a **market factory** and **SPL-token** escrow (instead of
+  a single native-SOL vault). Confirm which design is in production before
+  publishing; the two should not be mixed in a single deployment.
+</Note>
+
+A per-ball prediction market with a market factory, multi-outcome `BallOutcome`
+(Run0, Run1, Run2, Run3, Run4, Run6, Wicket, Extra, NoBall, Bye, LegBye, Penalty),
+token escrow/payout, deterministic single resolution, and a configurable
+`protocol_fee_bps` paid to a treasury.
+
+**Instructions:** `init_factory`, `create_market`, `place_position`, `resolve`,
+`claim`.
+
+**PDAs:**
+
+| Account | Seeds |
+| --- | --- |
+| Factory | `["factory", authority]` |
+| Market | `["market", factory, market_id]` |
+| Escrow vault | `ATA(market_pda, mint)` |
+| OutcomeStake | `["outcome_stake", market, outcome_u8]` |
+| Position | `["position", market, user, outcome_u8]` |
+
+**Errors:** `InvalidFeeBps` (fee > 10000), `InvalidAmount` (amount == 0),
+`MarketAlreadyResolved`, `MarketNotResolved`, `NotWinningOutcome`, `AlreadyClaimed`,
+`ZeroTotalStake` / `ZeroPayout`.
