@@ -31,7 +31,7 @@
     "directory": "card",
     "tabs": [
       {
-        "tab": "Trust & Security",
+        "tab": "Docs",
         "groups": [
           {
             "group": "Overview",
@@ -92,8 +92,8 @@
   "navbar": {
     "primary": {
       "type": "button",
-      "label": "Start here",
-      "href": "/security/introduction"
+      "label": "Get Started",
+      "href": "https://app.microset.io"
     }
   },
   "footer": {
