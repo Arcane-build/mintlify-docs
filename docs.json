@@ -54,6 +54,7 @@
             "icon": "file-code",
             "pages": [
               "security/contracts",
+              "security/smart-contract",
               "security/security-assessment",
               "security/transaction-safety"
             ]
