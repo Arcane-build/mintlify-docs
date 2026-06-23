@@ -12,36 +12,42 @@ description: "Example transactions, expected effects, and simulation evidence."
 ## Example transactions
 
 <Tabs>
-  <Tab title="Trade (swap)">
+  <Tab title="Place bet">
     | Field | Value |
     | --- | --- |
-    | Instruction | `swap` |
-    | Transaction signature | [TODO: Add Solana transaction signature] |
-    | Signer (user) | [TODO] |
-    | Program | [TODO: production program ID] |
-    | Direction / side | Buy/Sell · YES/NO [TODO] |
-    | Slippage bound | `minimum_receive_amount` = [TODO] |
-    | Expected balance change | Quote out/in + outcome tokens in/out; fee to `team_wallet` |
-    | Events | `TradeEvent` |
+    | Instruction | `place_bet` |
+    | Program | `B6nzqfZfxJ2UyAGD7ko3zSa2QLF8aWNjHqjkDqh1dzsC` (devnet) |
+    | Transaction signature | [INSERT a real devnet signature] |
+    | Signer (user) | [INSERT user address] |
+    | Expected balance change | SOL moves from the user into the market vault |
+    | Events | `BetPlaced` |
   </Tab>
-  <Tab title="Claim winnings">
+  <Tab title="Claim">
     | Field | Value |
     | --- | --- |
-    | Instruction | `claim_winnings` |
-    | Transaction signature | [TODO: Add Solana transaction signature] |
-    | Precondition | Market resolved / completed |
-    | Expected balance change | Winning tokens burned; proportional quote paid from vault |
-    | Events | `ClaimWinningsEvent` |
+    | Instruction | `claim` |
+    | Transaction signature | [INSERT a real devnet signature] |
+    | Precondition | Market resolved (or voided) |
+    | Expected balance change | Proportional payout from vault to the winner (or full refund if voided) |
+    | Events | `Claimed` |
   </Tab>
-  <Tab title="Add liquidity">
+  <Tab title="Resolve">
     | Field | Value |
     | --- | --- |
-    | Instruction | `add_liquidity` |
-    | Transaction signature | [TODO: Add Solana transaction signature] |
-    | Expected balance change | Quote user → vault; LP position recorded |
-    | Events | (none emitted) |
+    | Instruction | `resolve` |
+    | Caller | `config.resolution_authority` |
+    | Transaction signature | [INSERT a real devnet signature] |
+    | Expected balance change | Protocol fee moves from vault to treasury `3AzAex6f…xn9Cz` |
+    | Events | `MarketResolved` |
   </Tab>
 </Tabs>
+
+<Note>
+  The transaction signatures above must be real on-chain signatures — they are not
+  in the source code. Pull a few representative ones from the
+  [program's explorer page](https://explorer.solana.com/address/B6nzqfZfxJ2UyAGD7ko3zSa2QLF8aWNjHqjkDqh1dzsC?cluster=devnet)
+  and paste them in.
+</Note>
 
 ## Expected balance changes
 
@@ -55,23 +61,19 @@ so a reviewer can confirm there are no unexpected outbound transfers.]
   your own simulation output strengthens the review.
 </Note>
 
-<CardGroup cols={3}>
-  <Card title="Explorer (program)" icon="magnifying-glass">
-    [TODO: Solana Explorer / Solscan link for the program]
-  </Card>
-  <Card title="Example tx trace" icon="receipt">
-    [TODO: Explorer link for an example transaction]
+<CardGroup cols={2}>
+  <Card title="Program on explorer" icon="magnifying-glass" href="https://explorer.solana.com/address/B6nzqfZfxJ2UyAGD7ko3zSa2QLF8aWNjHqjkDqh1dzsC?cluster=devnet">
+    View the program and its recent transactions on Solana Explorer (devnet).
   </Card>
   <Card title="Wallet simulation" icon="wallet">
-    [TODO: Phantom/Blockaid simulation screenshot]
+    [INSERT a Phantom/Blockaid transaction-simulation screenshot]
   </Card>
 </CardGroup>
 
 ## Why these transactions are expected and benign
 
-Each example maps one-to-one to an action the user explicitly initiated. Trades
-price against a transparent on-chain AMM with a user-set slippage bound; claims
-pay out by a fixed proportional formula from a program-owned vault. There are no
-hidden transfers and no broad token-delegate authorizations beyond those
-documented in [Wallet Interactions](/security/wallet-interactions). [TODO: tailor
-this to the confirmed production behavior.]
+Each example maps one-to-one to an action the user explicitly initiated. Bets move
+SOL into a program-owned market vault; claims pay out by a fixed proportional
+(parimutuel) formula from that vault. There are no hidden transfers, no SPL token
+delegate, and no authority that can move a user's main-wallet funds — see
+[Wallet Interactions](/security/wallet-interactions).

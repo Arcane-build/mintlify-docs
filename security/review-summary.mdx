@@ -13,10 +13,9 @@ description: "A concise summary of Microset's behavior and security posture."
 ## At a glance
 
 Microset is a non-custodial **Solana prediction market**. Users connect their own
-Solana wallet, and every on-chain action — trading, providing liquidity, claiming
-winnings — requires a transaction the user explicitly signs. Market reserves are
-held in program-controlled vault PDAs and paid out only according to on-chain
-rules.
+Solana wallet, and every on-chain action — placing a bet or claiming winnings —
+requires a transaction the user explicitly signs. Stakes are held in
+program-controlled vault PDAs and paid out only according to on-chain rules.
 
 ## Why Microset is safe to use
 
@@ -27,7 +26,7 @@ rules.
   </Accordion>
   <Accordion title="Transparent, rule-based settlement">
     Market reserves live in program-derived vault accounts and pay out by fixed
-    on-chain formulas (a per-side constant-product AMM). See [Contracts](/security/contracts)
+    on-chain parimutuel formulas. See [Contracts](/security/contracts)
     and [Transaction Safety](/security/transaction-safety).
   </Accordion>
   <Accordion title="Reviewable, open instructions">

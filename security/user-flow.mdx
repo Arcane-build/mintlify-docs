@@ -16,11 +16,11 @@ Backpack, and other Wallet-Standard wallets). Embedded-wallet creation is disabl
 
 <Steps>
   <Step title="User opens the app">
-    The user opens the Microset app. [TODO: confirm production app URL].
+    The user opens the official app at https://app.microset.io.
   </Step>
   <Step title="User connects a Solana wallet">
     Privy prompts the user to connect an existing Solana wallet. No funds move at
-    this step. [TODO: Add screenshot of the connect prompt].
+    this step. [INSERT screenshot of the connect prompt].
   </Step>
   <Step title="User signs a sign-in message">
     To authenticate with the backend, the wallet is asked to sign a human-readable
@@ -28,10 +28,11 @@ Backpack, and other Wallet-Standard wallets). Embedded-wallet creation is disabl
     `signMessage` request — it authorizes nothing on-chain and moves no funds. The
     backend verifies the signature and issues a session JWT.
   </Step>
-  <Step title="(Optional) Session wallet">
-    To avoid re-prompting on every bet, the app can derive a short-lived session
-    key from a signed message. This is a UX convenience; the user authorizes it
-    explicitly. [TODO: confirm the exact consent copy shown to users].
+  <Step title="(Optional) Quick-bet session">
+    To avoid re-prompting on every bet, the user can sign once to create an
+    on-chain quick-bet session funded with a spend cap they choose. Bets are then
+    placed from that capped escrow. The user can withdraw unused funds or revoke
+    the session at any time.
   </Step>
 </Steps>
 
@@ -45,19 +46,19 @@ devnet SOL to place bets and pay transaction fees.
   the devnet network.
 </Card>
 
-## Trade / claim transaction flow
+## Bet / claim transaction flow
 
 <Steps>
-  <Step title="User selects a market and side">
-    The user chooses a market and a Yes or No position in the UI.
+  <Step title="User selects a market and outcome">
+    The user chooses a market and an outcome in the UI and enters a stake amount.
   </Step>
   <Step title="App builds a Solana transaction">
-    The app constructs the corresponding program instruction (for example,
-    `swap`) using the program IDL. Parameters match the displayed action,
-    including a `minimum_receive_amount` for slippage protection.
+    The app constructs the `place_bet` instruction (or `place_bet_with_delegate`
+    for a quick-bet session) using the program IDL. Parameters match the displayed
+    action.
   </Step>
   <Step title="Wallet shows the transaction">
-    The Solana wallet displays the instruction and accounts for review. [TODO: Add
+    The Solana wallet displays the instruction and accounts for review. [INSERT
     screenshot of the wallet transaction prompt].
   </Step>
   <Step title="User signs and the app submits">
@@ -76,16 +77,16 @@ devnet SOL to place bets and pay transaction fees.
 | --- | --- | --- |
 | Connect | Privy wallet-connect prompt | Nothing |
 | Sign-in | `Microsets:wallet-auth:` message | One off-chain message (no fund movement) |
-| Trade | Market + position details | One on-chain transaction (`swap`) |
-| Claim | Resolved market + payout | One on-chain transaction (`claim_winnings`) |
+| Bet | Market + outcome + stake | One on-chain transaction (`place_bet`) |
+| Claim | Resolved market + payout | One on-chain transaction (`claim`) |
 
 ## Expected result after signing
 
-After a trade, the user receives or sells Yes/No outcome tokens at the AMM price,
-with a platform fee applied. After `claim_winnings` on a resolved market, the
-user's winning tokens are burned and the proportional quote payout is transferred
-from the vault to the user. No additional or background transactions are
-triggered.
+After a bet, the user's SOL moves into the market vault and their stake on the
+chosen outcome is recorded. After `claim` on a resolved market, the winner's
+proportional share of the pool (minus the protocol fee) is transferred from the
+vault to their wallet; a voided market refunds the full stake. No additional or
+background transactions are triggered.
 
 ## Evidence placeholders
 

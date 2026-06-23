@@ -14,14 +14,13 @@ description: "What Microset is, and the context for this security review."
 ## What is Microset
 
 Microset is a decentralized **prediction market** built on **Solana** using the
-[Anchor](https://www.anchor-lang.com/) framework. Users can take Yes/No positions
-on binary outcomes of real-world events (for example, sports matches), trade those
-positions against an on-chain automated market maker (AMM), and claim winnings
-once a market resolves.
+[Anchor](https://www.anchor-lang.com/) framework. Users stake on the outcomes of
+real-world events (for example, cricket matches). It is **parimutuel**: all stakes
+for a market are pooled, and when the market resolves, everyone who picked the
+winning outcome shares the pool, minus a protocol fee.
 
-> **Primary purpose:** A non-custodial, on-chain binary prediction market —
-> create markets, trade Yes/No outcome tokens, provide liquidity, and settle
-> based on real-world results.
+> **Primary purpose:** A non-custodial, on-chain parimutuel prediction market —
+> stake on event outcomes and settle based on real-world results.
 
 Microset is **non-custodial**: users connect their own Solana wallet, and every
 on-chain action requires a transaction the user signs themselves. The program
@@ -32,7 +31,7 @@ by on-chain rules, not by an operator who can freely move user funds.
 
 <CardGroup cols={2}>
   <Card title="Traders" icon="users">
-    Users who connect a Solana wallet to trade Yes/No outcome positions and claim
+    Users who connect a Solana wallet to stake on event outcomes and claim
     winnings.
   </Card>
   <Card title="Reviewers" icon="shield-check">
@@ -44,28 +43,23 @@ by on-chain rules, not by an operator who can freely move user funds.
 
 | Layer | Technology |
 | --- | --- |
-| Smart contract | Solana program (Rust) built with Anchor `0.30.1` |
-| Token standard | SPL Token (Yes/No outcome mints + a quote asset) |
-| Market maker | Per-side constant-product AMM (on-chain) |
+| Smart contract | Solana program (Rust) built with Anchor |
+| Market model | Parimutuel — staked SOL pooled per market, paid to winners |
 | Wallet / auth | [Privy](https://www.privy.io/), Solana-only, external wallets |
-| Frontend | Expo / React Native app |
+| Frontend | Expo / React Native app (`app.microset.io`) |
 | Backend | Node/Express API (`testapi.microset.io`), MongoDB |
+| Resolution data | Sports data provider (Roanuz Sports API for cricket) |
 
 ## On-chain program
 
 | Field | Value |
 | --- | --- |
-| Program ID (contracts repo, `declare_id!`) | `EcncSdXCTy2RnpnZPXa1VPij1tjbS6wSjrwM47vFEN9e` |
-| Program ID (frontend config / IDL) | `B6nzqfZfxJ2UyAGD7ko3zSa2QLF8aWNjHqjkDqh1dzsC` |
-| Default cluster (repo config) | `devnet` (no mainnet entry defined in `Anchor.toml`) |
+| Program ID | `B6nzqfZfxJ2UyAGD7ko3zSa2QLF8aWNjHqjkDqh1dzsC` |
+| Cluster | Solana **devnet** |
+| Explorer | [View on Solana Explorer](https://explorer.solana.com/address/B6nzqfZfxJ2UyAGD7ko3zSa2QLF8aWNjHqjkDqh1dzsC?cluster=devnet) |
 
-<Warning>
-  The program ID in the contracts repository
-  (`EcncSdXCTy2RnpnZPXa1VPij1tjbS6wSjrwM47vFEN9e`) does **not** match the program
-  ID the frontend loads (`B6nzqfZfxJ2UyAGD7ko3zSa2QLF8aWNjHqjkDqh1dzsC`). Confirm
-  which program ID is actually deployed in production and make the docs and code
-  consistent before publishing.
-</Warning>
+The Microset web app (`app.microset.io`) and backend both use this single program.
+See [Program & Contracts](/security/contracts) for the full technical reference.
 
 ## Official links
 
@@ -76,9 +70,9 @@ by on-chain rules, not by an operator who can freely move user funds.
 
 | Resource | Link |
 | --- | --- |
+| App | https://app.microset.io |
 | Website | https://microset.io |
-| API (current) | https://testapi.microset.io |
-| GitHub | [INSERT GITHUB URL] |
-| Solana explorer (program) | [TODO: Add Solana Explorer / Solscan link for the deployed program ID] |
+| API | https://testapi.microset.io |
+| Solana explorer (program) | https://explorer.solana.com/address/B6nzqfZfxJ2UyAGD7ko3zSa2QLF8aWNjHqjkDqh1dzsC?cluster=devnet |
 | Support email | tech@microset.io |
 | Security review | Internal security audits and vulnerability testing completed |

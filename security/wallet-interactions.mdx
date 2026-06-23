@@ -16,9 +16,9 @@ description: "Every signature and authorization Microset requests from a connect
 | --- | --- | --- |
 | Connect wallet (read public key) | ✅ Yes | Via Privy, Solana-only; external wallets |
 | Sign-in message (`signMessage`) | ✅ Yes | Human-readable, prefixed `Microsets:wallet-auth:`; off-chain; authorizes a backend JWT only |
-| Sign transaction (`signTransaction` / `sendTransaction`) | ✅ Yes | Only on explicit user action (trade, add/withdraw liquidity, claim) |
+| Sign transaction (`signTransaction` / `sendTransaction`) | ✅ Yes | Only on explicit user action (place bet, claim, manage quick-bet session) |
 | Embedded wallet creation | ❌ No | Disabled (`createOnLogin: 'off'`) |
-| Auto-approve / blind signing | ❌ No | [TODO: confirm no auto-approve is enabled in production] |
+| Privy auto-approve / blind signing | ❌ No | Not used. Repeated bets use an explicit, user-funded quick-bet session instead (see below) |
 
 ## Signature types
 
@@ -29,44 +29,46 @@ description: "Every signature and authorization Microset requests from a connect
     grants no on-chain authority and moves no funds.
   </Accordion>
   <Accordion title="Transaction signing (on-chain)">
-    Used for `swap`, `add_liquidity`, `withdraw_liquidity`, and `claim_winnings`.
-    Each is a standard Solana transaction the user reviews in their wallet.
+    Used for `place_bet`, `claim`, and quick-bet session management. Each is a
+    standard Solana transaction the user reviews in their wallet.
   </Accordion>
-  <Accordion title="Session wallet delegate">
-    Optionally, a short-lived session keypair is derived from a user-signed
-    message so repeated bets don't re-prompt. [TODO: document the session key's
-    scope, lifetime, and revocation, and confirm the consent shown to users.]
+  <Accordion title="Quick-bet delegate session">
+    Optional. The user signs once to create an on-chain delegate session
+    (`create_delegate_session`), funding an escrow with a **spend cap**
+    (`max_lamports`) and an expiry (`expires_at`). A local delegate key then signs
+    quick bets (`place_bet_with_delegate`) drawn only from that capped escrow. The
+    user can add funds (`fund_delegate_session`), withdraw unused funds
+    (`withdraw_delegate_funds`), or revoke the session at any time
+    (`revoke_delegate_session`). The delegate cannot spend beyond the cap and
+    cannot touch the user's main wallet balance.
   </Accordion>
 </AccordionGroup>
 
 ## Token authorization behavior
 
-<Warning>
-  Solana does not use ERC20 `approve` / `setApprovalForAll` / Permit2. Outcome
-  tokens and the quote asset are moved by the program's instructions when the user
-  signs the corresponding transaction. Complete the rows below from the production
-  frontend so reviewers can confirm no broad token-delegate authority is granted.
-</Warning>
+<Note>
+  Solana does not use ERC20 `approve` / `setApprovalForAll` / Permit2. Stakes are
+  native SOL, moved by the program's instructions only when the user signs the
+  corresponding transaction. No broad token-delegate authority is granted.
+</Note>
 
 | Mechanism | Used? | Notes |
 | --- | --- | --- |
-| SPL `Approve` (token delegate) | [TODO: Confirm] | If the session wallet uses an SPL delegate, document its scope and amount |
-| Direct transfer via signed instruction | ✅ Yes | Quote/outcome tokens move within `swap`, liquidity, and claim instructions |
-| Outcome-token mint authority | ❌ Revoked | Yes/No mints have mint authority set to `None` after initial supply (fixed supply) |
+| SPL `Approve` (token delegate) | ❌ No | Microset stakes are native SOL; no SPL token delegate is granted |
+| Direct transfer via signed instruction | ✅ Yes | SOL moves into the market vault on `place_bet`, and out on `claim`, only via signed instructions |
+| Quick-bet escrow (delegate session) | ✅ Optional | A user-funded, capped, revocable on-chain escrow — see above |
 
 ## Program mechanics (Solana equivalents)
 
 | Mechanic | Status | Notes |
 | --- | --- | --- |
 | Proxy / `delegatecall` | ❌ N/A | Not a Solana concept |
-| Program upgradeability | [TODO: Confirm] | Solana programs are upgradeable by default via the BPF Upgradeable Loader unless the upgrade authority is removed. Confirm the deployed program's upgrade authority (and whether it is a multisig or has been made immutable). See [Contracts](/security/contracts). |
-| Cross-program invocations (CPIs) | ✅ Yes | Calls to the SPL Token Program, Associated Token Program, and (for NO-token metadata) Metaplex |
-| PDAs holding funds | ✅ Yes | A program-owned global vault PDA holds reserves; payouts are signed by the program per on-chain rules |
+| Program upgradeability | Upgradeable | Upgrade authority is a single key held by Microset. See [Contracts](/security/contracts). |
+| PDAs holding funds | ✅ Yes | A program-owned vault PDA holds each market's staked SOL; payouts are signed by the program per on-chain rules |
 
 ## Summary
 
 Microset requests a wallet connection, one human-readable sign-in message, and
-explicit transaction signatures for each trade or claim. Outcome-token supply is
-fixed (mint authority revoked), and funds move only through documented
-instructions. Complete the `[TODO]` rows — especially the session-wallet scope and
-the program's upgrade authority — so a reviewer can verify this end to end.
+explicit transaction signatures for each bet or claim. Stakes are native SOL that
+move only through documented instructions, the optional quick-bet delegate is
+bounded by a user-set cap and is revocable, and no SPL token delegate is granted.
