@@ -1,97 +1,225 @@
 ---
 title: "Privacy Policy"
-description: "How Microset collects, uses, and protects your information."
+description: "How Microset collects, generates, uses, and shares information."
 ---
 
 <Info>
-  **Last updated:** June 23, 2026. This Privacy Policy explains how
-  Microset handles your information. By using the Service, you agree to the
-  practices described here.
+  **Effective date:** May 1, 2026 · **Version 1.0**. This Privacy Policy explains
+  how Microset handles information. By using the Services, you agree to the
+  practices described here. Read it together with the
+  [Terms & Conditions](/legal/terms-and-conditions) and the
+  [Risk Disclosure](/legal/risk-disclosure).
 </Info>
 
-## 1. Who we are
+## 1. Introduction and scope
 
-This Privacy Policy explains how Microset ("Microset", "we",
-"us") handles information in connection with the Microset prediction-market
-application (the "Service"). For data-handling specifics, see the
-[Data Policy](/legal/data-policy).
+Microset operates a protocol for real-time, on-chain micro-markets tied to the
+internal tempo of live events. This Privacy Policy describes the categories of
+information that Microset, a Cayman Islands entity, together with its affiliates,
+including Microset LLC, a U.S. limited liability company ("Microset", "we", "us"),
+collect, generate, process, and share in connection with the Microset protocol,
+our websites, APIs, software development kits, hosted or reference front-end
+interfaces, and related services (collectively, the "Services").
 
-## 2. Information we collect
+Microset is a Web3 protocol. A defining characteristic of Web3 systems is that
+core activity is recorded on a public, decentralized blockchain — here, Solana. As
+a result, certain data described here is, by design, **public, pseudonymous, and
+permanent**, and is not within Microset's exclusive control.
 
-| Category | Examples | Source |
-| --- | --- | --- |
-| Wallet data | Your Solana wallet public address | You, when you connect a wallet |
-| Authentication data | A signed sign-in message and the resulting session token | You, at sign-in |
-| Activity data | Markets viewed, predictions placed, claims (also recorded publicly on-chain) | Your use of the Service |
-| Device & usage data | IP address, browser/device type, log data | Automatically |
-| Support data | Information you provide when contacting us | You |
+**Infrastructure vs. interface.** Microset distinguishes between (a) the neutral,
+on-chain protocol layer, which provides deterministic market mechanics and does
+not, in itself, collect personal data; and (b) front-end interfaces and off-chain
+services operated by Microset or by third parties, which may collect personal data
+as described below. Where a third party operates an interface that integrates the
+protocol, that third party may act as an independent data controller under its own
+privacy notice.
 
-We do **not** collect or store your private keys or seed phrase, and we never ask
-for them.
+## 2. Definitions
 
-## 3. On-chain information is public
+- **On-chain data** — information recorded on a public blockchain, including wallet addresses, transaction signatures, market participation, escrow allocations, and settlement outcomes.
+- **Off-chain data** — information processed outside the blockchain, including device, usage, analytics, support, and (where applicable) identity-verification data.
+- **Personal data** — information relating to an identified or identifiable natural person under applicable law (including the GDPR and CCPA/CPRA). A wallet address may constitute personal data where it can be linked to an individual.
+- **Wallet** — a self-custodial digital-asset wallet controlled by the user through private keys that Microset does not hold or access.
+- **Event data** — authenticated, real-time data describing the state of live events (for example, per-ball or per-point outcomes) supplied by licensed third-party data providers or oracles.
 
-Transactions you sign are recorded on the Solana blockchain, which is **public and
-permanent**. Your wallet address and on-chain activity can be viewed by anyone and
-are outside our control. This is inherent to public blockchains.
+## 3. Categories of data we collect and generate
 
-## 4. How we use information
+### 3.1 On-chain data
 
-- To provide and operate the Service (authenticate you, display your positions and history);
-- To secure the Service and prevent fraud or abuse;
-- To improve and maintain the Service;
-- To communicate with you about support requests or material changes;
-- To comply with legal obligations and enforce our Terms.
+When you interact with the protocol, the following is recorded on Solana and is
+publicly visible and permanent: your public wallet address(es); transaction details
+(timestamps, amounts, the specific micro-markets entered, outcome selections,
+escrow allocations, protocol fees, and settlement results); and information
+necessarily recorded by protocol transactions, which may be used to derive
+behavioral or engagement metrics.
 
-## 5. Legal bases (where applicable)
+<Warning>
+  Microset does not control the blockchain and cannot alter, delete, or anonymize
+  on-chain data once recorded. Assume any on-chain activity is permanent, public,
+  and potentially linkable to your identity through external analysis.
+</Warning>
 
-Where GDPR or similar laws apply, we rely on: performance of a contract (providing
-the Service), legitimate interests (security, improvement), legal obligation, and
-consent where required.
+### 3.2 Off-chain data collected by Microset interfaces
 
-## 6. How we share information
+Where you access a Microset-operated website or interface, we may collect:
 
-We do not sell your personal information. We share information only with:
+- **Device and connection data** — IP address, browser type, operating system, device identifiers, and approximate location derived from IP;
+- **Usage and interaction data** — pages viewed, features used, session duration, referral source, and diagnostic logs;
+- **Wallet-connection metadata** — the public address and signature provided when you connect a wallet (never private keys or seed phrases);
+- **Communications data** — information you provide when contacting support, responding to surveys, or participating in whitelisting or testing programs;
+- **Compliance data, where required** — identity-verification information collected by Microset or a third-party provider (see Section 3.4).
 
-- **Service providers / sub-processors** that help us run the Service (for example, wallet-connection provider Privy, Solana RPC providers, hosting, and database providers). See the [Data Policy](/legal/data-policy) for the current list.
-- **Legal and safety**: where required by law, or to protect our rights, users, or the public.
+### 3.3 Event data and third-party feeds
 
-## 7. Data retention
+The protocol consumes authenticated event data from licensed providers and oracles
+to spawn, resolve, and settle markets. This event data describes the state of live
+events and is **not** personal data about users.
 
-We retain information for as long as needed to provide the Service and meet legal
-obligations, then delete or anonymize it. On-chain
-data cannot be deleted.
+### 3.4 Compliance and verification data
 
-## 8. Security
+Depending on jurisdiction and applicable law, certain interfaces may require
+identity verification, sanctions screening, or eligibility attestations before
+access is granted. Where collected, such data is processed only for legal
+compliance, fraud prevention, sanctions screening, and access control, and may be
+handled by specialized third-party providers.
 
-We use technical and organizational measures to protect information, including
-encrypted storage of sensitive credentials. No system is perfectly secure, and we
-cannot guarantee absolute security.
+## 4. Wallet, key, and custody handling
 
-## 9. Your rights
+<Warning>
+  **Non-custodial by design.** We never collect, request, store, transmit, or
+  access your private keys, seed phrases, recovery phrases, or wallet passwords.
+  Microset cannot move, freeze, or recover assets in your wallet, and cannot reset
+  lost keys. Anyone asking you to share a seed phrase or private key — including
+  anyone claiming to be Microset support — is attempting to defraud you.
+</Warning>
 
-Depending on your location, you may have rights to access, correct, delete, or
-restrict use of your personal information, and to object to processing or request
-portability. To exercise these rights, contact us at
-[tech@microset.io](mailto:tech@microset.io). Note that on-chain data cannot be
-altered or removed.
+Microset interfaces interact with wallets only through standard wallet-connection
+protocols and signed messages or transactions that you explicitly authorize. Funds
+committed to a micro-market are held in on-chain, outcome-specific escrow governed
+by deterministic protocol logic, not by Microset as a custodian, and are
+distributed pro-rata by the smart contracts upon resolution. Microset does not set
+odds, take directional exposure, or act as counterparty to any market.
 
-## 10. International transfers
+## 5. How we use data
 
-We may process information in countries other than yours. Where required, we use
-appropriate safeguards for international transfers.
+Where Microset processes off-chain personal data, we do so for these purposes and
+legal bases (where the GDPR or similar law applies):
 
-## 11. Children
+- **Providing and securing the Services** (performance of a contract; legitimate interests) — operate interfaces, authenticate wallet connections, and protect against fraud, abuse, and security threats;
+- **Analytics and product improvement** (legitimate interests; consent where required) — understand engagement and improve the protocol (see Section 6);
+- **Legal and regulatory compliance** (legal obligation; legitimate interests) — sanctions screening, geographic restriction, age and eligibility checks, and responding to lawful requests;
+- **Communications** (legitimate interests; consent where required) — respond to inquiries, administer testing and whitelisting programs, and send service or compliance notices.
 
-The Service is not directed to anyone under 18, and we do not knowingly collect
-information from children. See the eligibility section of the
-[Terms & Conditions](/legal/terms-and-conditions).
+## 6. Analytics and behavioral metrics
 
-## 12. Changes to this policy
+Microset's model is validated through engagement rather than wager size. We and our
+partners may compute aggregated, pseudonymized metrics such as median resolved
+predictions per user per event, capital reuse per session, session duration during
+live events, and participation density during high-attention moments. Where
+analytics are derived from off-chain personal data, we apply aggregation,
+pseudonymization, or consent as required by law, and do not use such analytics to
+make decisions producing legal or similarly significant effects about an individual
+without an appropriate legal basis and safeguards.
 
-We may update this policy from time to time. Material changes will be posted here
-with a new "Last updated" date.
+## 7. Cookies and similar technologies
 
-## 13. Contact
+Microset-operated interfaces may use cookies, local storage, SDKs, and similar
+technologies for essential functionality, security, preference retention, and
+analytics. Where required by law, we present a consent mechanism for non-essential
+technologies and default to the more privacy-protective option. You may also
+control cookies through your browser settings.
 
-Privacy questions or requests: [tech@microset.io](mailto:tech@microset.io).
+## 8. Data sharing and disclosure
+
+Microset does not sell personal data for monetary consideration. We may share data
+with: **service providers and processors** (infrastructure, hosting, analytics,
+support, and identity-verification vendors under confidentiality and
+data-protection obligations); **data and oracle providers** (we receive
+authenticated event data and do not share user personal data with them unless
+necessary for security, fraud prevention, dispute analysis, audit, or legal
+compliance); **integration and distribution partners** (each may act as an
+independent controller under its own notice); **legal, safety, and compliance
+recipients** (regulators, law enforcement, and advisors as reasonably necessary);
+**corporate transactions** (subject to confidentiality protections); and **the
+public blockchain** (all on-chain activity is inherently published to a public
+ledger).
+
+## 9. On-chain transparency, immutability, and pseudonymity
+
+<Warning>
+  **Blockchain data is public and permanent.** Blockchain transactions are
+  pseudonymous, not anonymous. On-chain data — including your wallet address and
+  complete participation history — is publicly visible, broadcast to network
+  participants, and cannot be edited or deleted by Microset or anyone else. Third
+  parties may analyze this data and link a wallet address to a real-world identity.
+  Rights such as erasure or rectification cannot be technically applied to data
+  already recorded on a public blockchain.
+</Warning>
+
+## 10. Data retention
+
+Off-chain personal data is retained only as long as necessary for the purposes for
+which it was collected, including to satisfy legal, accounting, compliance, and
+reporting obligations, after which it is deleted or anonymized. Retention periods
+for compliance data (such as sanctions-screening or identity records) may be set by
+law and may extend for several years. On-chain data is permanent and outside
+Microset's control.
+
+## 11. Security
+
+Microset maintains administrative, technical, and organizational safeguards
+designed to protect off-chain personal data, including access controls, encryption
+in transit, logging, and vendor due diligence. At the protocol layer, all market
+creation, participation, and settlement logic is fully auditable on-chain and
+subject to security review, including third-party smart-contract auditing where
+appropriate. No system is perfectly secure, and user-side wallet security remains
+the user's responsibility.
+
+## 12. International data transfers
+
+Microset operates globally, and personal data may be processed in countries other
+than your own, including jurisdictions that may not provide the same level of data
+protection. Where required, we implement appropriate transfer safeguards such as
+standard contractual clauses. By their nature, public blockchains replicate data
+across nodes worldwide, so on-chain data is inherently global.
+
+## 13. Your privacy rights
+
+Depending on jurisdiction, you may have rights of access, correction, deletion,
+portability, restriction, objection, and the right to withdraw consent or lodge a
+complaint with a supervisory authority. California residents may have rights under
+the CCPA/CPRA. To exercise applicable rights, contact us using Section 17.
+
+**Limitation for on-chain data.** Rights such as erasure and rectification apply to
+off-chain personal data within Microset's control. They cannot be applied to data
+already recorded on a public blockchain. We honor verifiable requests to the extent
+technically and legally feasible.
+
+## 14. Children and minors
+
+The Services are not directed to, and may not be used by, individuals below the age
+of majority in their jurisdiction or below any higher minimum age required for
+participation in event-outcome markets. Microset does not knowingly collect
+personal data from minors and will restrict access and delete applicable off-chain
+data if it learns a minor has accessed a participation-enabled interface.
+
+## 15. Automated processing
+
+Protocol settlement is deterministic and rule-based, driven by observable event
+outcomes rather than profiling of individuals. To the extent any interface uses
+automated processing for fraud detection, sanctions screening, or eligibility that
+produces a legal or similarly significant effect, we provide safeguards consistent
+with applicable law, including, where required, meaningful information about the
+logic involved and the ability to contest a decision.
+
+## 16. Changes to this policy
+
+We may update this Privacy Policy to reflect changes in our practices, technology,
+or legal requirements. Material changes will be communicated through our interfaces
+or other appropriate means, and the effective date will be updated.
+
+## 17. Contact and data protection
+
+Questions or requests regarding this Privacy Policy:
+[tech@microset.io](mailto:tech@microset.io). We respond to verifiable requests
+within the timeframes required by applicable law.

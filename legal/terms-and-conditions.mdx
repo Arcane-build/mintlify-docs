@@ -4,122 +4,180 @@ description: "The terms that govern your use of Microset."
 ---
 
 <Info>
-  **Last updated:** June 23, 2026. These Terms govern your use of
-  Microset. Please read them carefully before using the Service.
+  **Effective date:** May 1, 2026 · **Version 1.0**. These Terms govern your use of
+  Microset. Please read them carefully, together with the
+  [Privacy Policy](/legal/privacy-policy) and the
+  [Risk Disclosure](/legal/risk-disclosure), before using the Service.
 </Info>
 
 ## 1. Acceptance of these terms
 
 By accessing or using Microset (the "Service"), you agree to be bound by these
 Terms & Conditions ("Terms"). If you do not agree, do not use the Service. The
-Service is operated by Microset ("Microset", "we", "us").
+Service is operated by Microset, a Cayman Islands entity, together with its
+affiliates, including Microset LLC, a U.S. limited liability company ("Microset",
+"we", "us").
 
-## 2. Eligibility
+## 2. Nature of the protocol
+
+Microset is designed to operate as **non-custodial market infrastructure** rather
+than as a bookmaker, house, discretionary market maker, directional counterparty,
+or custodian. The protocol provides neutral, deterministic market mechanics for
+short-lived, event-synchronous micro-markets. Markets are **peer-to-peer**:
+participants allocate capital into outcome-specific escrow pools and are paid
+pro-rata from those pools upon deterministic settlement, less a protocol fee.
+Microset does not set odds, take directional exposure, or guarantee outcomes.
+
+## 3. No advice; no offer of securities
+
+Nothing in the Service or any Microset communication constitutes investment, legal,
+tax, accounting, or financial advice, or a recommendation to enter into any
+transaction. Microset is not a broker, dealer, investment adviser, futures
+commission merchant, or fiduciary. Participation decisions are made solely by you.
+Microset does not, through the Service, offer or sell securities, and the protocol
+does not require a native token for its core operation (see Section 11).
+
+## 4. Eligibility, age, and responsible participation
 
 You may use the Service only if you:
 
-- Are at least 18 years old (or the age of majority in your jurisdiction, whichever is higher);
-- Are accessing the Service from a jurisdiction where Microset makes it available (see Geographic availability below);
-- Are not a resident of, or located in, any jurisdiction where on-chain prediction markets are prohibited or restricted; and
-- Are not barred from using the Service under any applicable law or sanctions list.
+- Are at least 18 years old (or the age of majority in your jurisdiction, or any higher minimum age required for participation in event-outcome markets, whichever is higher);
+- Are accessing the Service from a jurisdiction where Microset makes it available (see Section 5);
+- Are not a Sanctioned Person and are not located in a Prohibited Jurisdiction; and
+- Are otherwise permitted under applicable law to participate.
 
-### Geographic availability and geofencing
+Event-outcome markets carry risk of loss. You should commit only capital you can
+afford to lose. Where appropriate, interfaces may provide responsible-play
+information, self-exclusion tools, activity limits, and links to support resources.
 
-Microset is made available **only in jurisdictions where on-chain prediction
-markets are legally permitted**. We operate **geofencing and IP-based access
-controls** to restrict and block access from jurisdictions where the Service is
-not offered or is prohibited or restricted.
+## 5. Geographic restrictions and geofencing
 
-By using the Service, you represent that you are accessing it from a permitted
-jurisdiction and that you will not use a VPN, proxy, or any other method to
-disguise your location or circumvent these controls. We may update the list of
-permitted jurisdictions at any time, and we may suspend access where required by
-law. 
+Access to participation-enabled interfaces is **restricted by jurisdiction**.
+Microset and its integration partners implement controls that may include IP-based
+geofencing, wallet- or jurisdiction-level screening, eligibility attestations, and
+selective market availability, so that markets are available only where consistent
+with applicable law.
 
-## 3. The Service
+- You must not access participation-enabled interfaces from, or while resident in, any Prohibited Jurisdiction, and must not use VPNs, proxies, or other means to circumvent geographic or eligibility restrictions.
+- The list of Prohibited Jurisdictions and restricted markets may change at any time in response to legal developments.
+- Availability of an interface in a jurisdiction is not a representation that participation is lawful for any particular user; you remain responsible for your own compliance.
 
-Microset is a **non-custodial**, on-chain prediction market built on the Solana
-blockchain. Users connect their own Solana wallet and place stakes on the outcomes
-of real-world events. Markets resolve to a single outcome, and the staked pool is
-distributed to those who selected the winning outcome, less a protocol fee.
+## 6. Anti-money-laundering, sanctions, and KYC
 
-Microset does not hold custody of your funds or private keys. All transactions are
-initiated and signed by you through your own wallet and are executed by on-chain
-program logic.
+Microset is committed to preventing use of the Service for money laundering,
+terrorist financing, sanctions evasion, or other illicit finance. Depending on
+jurisdiction and interface configuration, controls may include sanctions screening
+of wallet addresses against applicable lists (including OFAC, the UN, the EU, and
+the UK), identity verification, transaction monitoring, and blocking or restricting
+access for Sanctioned Persons or addresses associated with illicit activity. You
+represent that you are not a Sanctioned Person, are not acting on behalf of one,
+and will not use the Service for unlawful purposes. Microset may suspend or
+terminate access and report activity as required by law.
 
-## 4. Wallets and transactions
+## 7. Wallets and transactions
 
 - You are solely responsible for your wallet, private keys, and seed phrase. We will never ask for them, and we cannot recover them.
 - Blockchain transactions are **irreversible** once confirmed. We cannot reverse, cancel, or refund a confirmed transaction.
-- You are responsible for any network (gas) fees and for verifying every transaction before you sign it.
-- You are responsible for any taxes arising from your use of the Service.
+- You are responsible for network (gas) fees and for verifying every transaction before you sign it.
+- Settlement is immediate and there is no dispute window; losses are realized instantly upon resolution.
 
-## 5. Fees
+## 8. Fees
 
 The Service charges a protocol fee on market pools at resolution, as described in
 the product documentation. Fees are applied transparently on-chain and are capped
 by the program's on-chain configuration.
 
-## 6. Market resolution
+## 9. Market resolution
 
-Markets are resolved to a single outcome by the designated resolution authority or
-resolution process once the real-world result is known. Voided markets refund
+Markets are resolved to a single outcome by the designated resolution authority
+once the real-world result is known, driven by authenticated **third-party event
+data** (see [Risk Disclosure](/legal/risk-disclosure)). Voided markets refund
 stakes in full. You acknowledge that resolution depends on real-world data and that
-disputes are handled by the resolution authority based on the official third-party data source.
+settlement is atomic and final.
 
-## 7. Prohibited conduct
+## 10. Prohibited conduct
 
-You agree not to:
+You agree not to: use the Service for money laundering, fraud, market manipulation,
+or any unlawful purpose; attempt to exploit, attack, or disrupt the smart
+contracts, frontend, or infrastructure; use the Service on behalf of anyone barred
+from using it, or to evade geographic restrictions; or misrepresent your identity,
+eligibility, or location.
 
-- Use the Service for money laundering, fraud, market manipulation, or any unlawful purpose;
-- Attempt to exploit, attack, or disrupt the smart contracts, frontend, or infrastructure;
-- Use the Service on behalf of anyone barred from using it, or to evade geographic restrictions;
-- Misrepresent your identity, eligibility, or location.
+## 11. No native token required
 
-## 8. No financial advice; assumption of risk
+The protocol does not require a native token for deployment or core operation. Any
+future token-related activity, if ever pursued, would occur only pursuant to
+separate terms, disclosures, and jurisdiction-specific legal analysis. Nothing in
+these Terms constitutes an offer, solicitation, or commitment to issue, distribute,
+or list any token.
 
-The Service is provided for informational and entertainment purposes and does not
-constitute financial, investment, legal, or tax advice. You may lose the entire
-amount you stake. You assume all risks of using a blockchain-based application,
-including smart-contract risk, market risk, and the risk of total loss.
+## 12. Tax
 
-## 9. Intellectual property
+Participation may have tax consequences that vary by jurisdiction and individual
+circumstance. You are solely responsible for determining, reporting, and paying any
+taxes applicable to your activity. Microset does not provide tax advice and may be
+required to report certain information to authorities. Consult your own qualified
+tax advisor.
 
-The Microset name, logo, and Service content are owned by Microset or its
-licensors. These Terms do not grant you any right to use them except as necessary
-to use the Service.
+## 13. Intellectual property and trademarks
 
-## 10. Disclaimers
+"Microset", the Microset logo, and related names and marks are trademarks or
+service marks of Microset LLC or its affiliates, whether or not registered. The
+protocol's software, documentation, designs, and market templates are protected by
+copyright, trade-secret, and other laws and are owned by Microset or its licensors.
+No license to use any Microset trademark is granted except under a separate written
+agreement. Third-party names, league names, team names, and event marks referenced
+in connection with markets or data feeds are the property of their respective
+owners; reference does not imply endorsement, license, or affiliation.
+
+## 14. Forward-looking statements
+
+Certain statements in our materials, including market-size estimates, projections,
+and roadmap items such as expansion into additional sports, are forward-looking and
+inherently uncertain, are based on assumptions that may prove incorrect, and are not
+guarantees of future performance. Microset undertakes no obligation to update them
+except as required by law.
+
+## 15. Disclaimers
 
 The Service is provided "as is" and "as available" without warranties of any kind,
-express or implied, including merchantability, fitness for a particular purpose,
-and non-infringement. We do not warrant that the Service will be uninterrupted,
-secure, or error-free.
+whether express, implied, or statutory, including merchantability, fitness for a
+particular purpose, title, non-infringement, accuracy, availability, or
+uninterrupted or error-free operation.
 
-## 11. Limitation of liability
+## 16. Limitation of liability
 
-To the maximum extent permitted by law, Microset and its affiliates will not be
-liable for any indirect, incidental, special, consequential, or punitive damages,
-or any loss of funds, profits, or data, arising from your use of the Service.
+To the maximum extent permitted by law, Microset and its affiliates, and their
+respective officers, directors, employees, and agents, will not be liable for any
+indirect, incidental, special, consequential, exemplary, or punitive damages, or
+for any loss of profits, assets, data, or goodwill, arising out of or relating to
+the Service, the protocol, smart-contract behavior, network performance, data-feed
+accuracy, or user wallet or key management, even if advised of the possibility of
+such damages. Some jurisdictions do not allow certain exclusions or limitations,
+which may not apply to you.
 
-## 12. Indemnification
+## 17. Indemnification
 
 You agree to indemnify and hold harmless Microset from any claims, losses, or
 expenses arising out of your use of the Service or your breach of these Terms.
 
-## 13. Changes and termination
+## 18. Governing law and dispute resolution
+
+These Terms are governed by the laws of the jurisdiction in which Microset is
+established, without regard to conflict-of-laws rules. Any disputes will be resolved
+through binding arbitration where permitted by applicable law, subject to any
+class-action waiver and forum provisions set out in the applicable agreement between
+the parties.
+
+## 19. Changes and severability
 
 We may modify these Terms or the Service at any time. Material changes will be
-posted here with an updated date. We may suspend or discontinue all or part of the
-Service at any time. Because the Service is non-custodial, your on-chain assets
-remain in your control.
+posted here with an updated date. If any provision is held unenforceable, the
+remaining provisions remain in full force, and the unenforceable provision will be
+modified to the minimum extent necessary to make it enforceable while preserving its
+intent. Because the Service is non-custodial, your on-chain assets remain in your
+control.
 
-## 14. Governing law
-
-These Terms are governed by the laws of the jurisdiction in which Microset is established, without regard to
-conflict-of-laws rules. Any disputes will be resolved through binding arbitration
-where permitted by applicable law.
-
-## 15. Contact
+## 20. Contact
 
 Questions about these Terms: [tech@microset.io](mailto:tech@microset.io).

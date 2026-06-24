@@ -1,0 +1,102 @@
+---
+title: "Risk Disclosure"
+description: "Material regulatory, technology, and financial risks of using Microset."
+---
+
+<Info>
+  **Effective date:** May 1, 2026 · **Version 1.0**. This Risk Disclosure describes
+  material legal, regulatory, technological, and financial considerations relating
+  to the Microset protocol and Services. Read it together with the
+  [Terms & Conditions](/legal/terms-and-conditions) and
+  [Privacy Policy](/legal/privacy-policy).
+</Info>
+
+## 1. Purpose and nature of the protocol
+
+Microset operates as non-custodial market infrastructure, not as a bookmaker,
+house, discretionary market maker, directional counterparty, or custodian. The
+protocol provides neutral, deterministic mechanics for short-lived,
+event-synchronous micro-markets. Participants allocate capital into
+outcome-specific escrow pools and are paid pro-rata upon deterministic settlement,
+less a protocol fee. Microset does not set odds, take directional exposure, or
+guarantee outcomes.
+
+## 2. Regulatory classification and uncertainty
+
+<Warning>
+  **Evolving and uncertain legal treatment.** Event-outcome markets, prediction
+  markets, on-chain derivatives, and digital-asset activity are subject to rapidly
+  evolving and inconsistent regulation worldwide. Depending on jurisdiction and
+  configuration, the activity facilitated by the protocol could be characterized
+  under gambling, gaming, commodities/derivatives, securities, money-transmission,
+  consumer-protection, or other regimes. Legal characterization is uncertain, may
+  differ across jurisdictions, may change over time, and may be applied
+  retroactively. Adverse regulatory developments could restrict, suspend, or
+  prohibit certain markets or access in particular jurisdictions.
+</Warning>
+
+Microset structures the protocol to emphasize transparency, the absence of house
+risk, deterministic settlement, and the lack of a centralized counterparty. These
+design choices do not guarantee any particular regulatory treatment. Partners and
+integrators are responsible for determining the legality of their offerings in the
+jurisdictions they serve and for obtaining any licenses or registrations required.
+
+## 3. Digital-asset, stablecoin, and market risk
+
+- **Volatility and value risk.** Digital assets used for participation may experience significant price volatility. Stablecoins may de-peg, lose value, or become non-redeemable, and are subject to issuer, reserve, redemption, banking, insolvency, regulatory, sanctions, and market-structure risks. Microset is not the issuer, sponsor, guarantor, custodian, redeemer, or insurer of any digital asset or stablecoin.
+- **Risk of total loss.** Participation can result in loss of the capital committed. Because settlement is immediate and there is no dispute window, losses are realized instantly upon resolution.
+- **Liquidity.** Liquidity forms in short, synchronized bursts around event moments. There is no expectation of exit liquidity prior to resolution; positions are held to settlement.
+- **Irreversibility.** Blockchain transactions are generally irreversible. Errors in transaction construction, address entry, or outcome selection may result in permanent loss.
+
+## 4. Smart-contract and technology risk
+
+The protocol is implemented through smart contracts. Despite auditing and testing,
+smart contracts may contain bugs, vulnerabilities, or unexpected interactions that
+could result in loss of funds, mispricing, failed settlement, or other harm.
+Upgrades, configuration changes, and dependencies on external components may
+introduce additional risk. No audit, formal verification, or bug-bounty program
+eliminates the possibility of defects or exploits.
+
+## 5. Blockchain network and infrastructure risk
+
+The protocol is deployed on Solana and may later interact with other networks.
+Solana has historically experienced intermittent network interruptions during
+periods of extreme load. Network congestion, outages, validator issues, consensus
+failures, forks, or changes to network rules or fees could delay or prevent market
+creation, participation, resolution, or settlement. Bounded market windows and
+deterministic state reconciliation mitigate, but do not eliminate, network-level
+risk.
+
+## 6. Oracle, data-feed, and settlement risk
+
+Markets resolve using deterministic data derived from authenticated event data
+feeds and, where unavoidable, oracles. Resolution depends on the accuracy,
+timeliness, and integrity of these external sources. Data-feed errors,
+manipulation, latency, or unavailability could cause delayed, incorrect, or disputed
+resolution. Because settlement is atomic and occurs immediately upon resolution with
+no dispute window, an erroneous data input may produce an irreversible settlement.
+Microset relies on authenticated sources, deterministic ordering, predefined
+resolution logic, and on-chain auditability to mitigate, but cannot eliminate, these
+risks.
+
+## 7. Fraud, manipulation, and adversarial risk
+
+Although the short-lived, narrowly scoped nature of micro-markets reduces many
+manipulation vectors, no system is immune. Potential vectors include data-feed
+manipulation, front-running, collusion, and abusive automation. Microset employs
+authenticated data sources, deterministic ordering, transparent on-chain execution
+enabling real-time surveillance, and additional sequencing and timing controls as
+appropriate.
+
+<Warning>
+  Remain alert to phishing, impersonation, fraudulent interfaces, and
+  social-engineering attempts. Interact only with official Microset resources, and
+  never share your seed phrase or private keys with anyone.
+</Warning>
+
+## 8. No warranty
+
+To the maximum extent permitted by law, the Services are provided "as is" and "as
+available," without warranties of any kind. See the
+[Terms & Conditions](/legal/terms-and-conditions) for the full disclaimer,
+limitation of liability, and governing-law provisions.
